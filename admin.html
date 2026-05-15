@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin El Rincón del Carmen</title>
+
+  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/admin.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+
+  <script src="/js/app.js" defer></script>
+  <script src="/js/auth.js" defer></script>
+  <script src="/js/admin.js" defer></script>
+  <script src="/js/admin_quejas.js" defer></script> 
+</head>
+<body class="admin-body">
+  <!-- Header -->
+  <header class="site-header site-header--admin">
+    <div class="container">
+      <a class="brand" href="index.html">El Rincón del Carmen</a>
+      <nav class="nav nav--admin">
+        <a href="index.html">Inicio</a>
+        <a href="reservas.html">Reservas</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="admin.html" data-active="true">Admin</a>
+      </nav>
+      <div class="auth">
+        <a class="btn btn-login" href="#" id="btnLogin">Iniciar Sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="admin-wrap container">
+    <header class="admin-head">
+      <h1>Panel de administración</h1>
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" data-tab="rooms" role="tab" aria-selected="true">Habitaciones</button>
+        <button class="tab" data-tab="bookings" role="tab">Reservas</button>
+        <button class="tab" data-tab="quejas" role="tab">Quejas y Reclamos</button>
+      </div>
+    </header>
+
+    <!-- Habitaciones-->
+    <section id="tab-rooms" class="admin-tab is-active">
+      <div class="bar">
+        <div class="filters">
+          <select id="fCityRooms" class="adm-select">
+            <option value="all">Todas las ciudades</option>
+          </select>
+          <input id="qRooms" class="adm-input" placeholder="Buscar por nombre/tipo…"/>
+        </div>
+        <button id="btnNewRoom" class="adm-btn adm-btn--primary">Crear habitación</button>
+      </div>
+
+      <div class="adm-table-wrap">
+        <table class="adm-table" id="roomsTable" aria-label="Habitaciones">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ciudad</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Cap.</th>
+              <th>⭐</th>
+              <th>m²</th>
+              <th>Vista</th>
+              <th>Precio /noche</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </section>
+
+    <!-- Reservas -->
+    <section id="tab-bookings" class="admin-tab">
+      <div class="bar">
+        <div class="filters">
+          <select id="fCityBookings" class="adm-select">
+            <option value="all">Todas las ciudades</option>
+          </select>
+          <input id="qBookings" class="adm-input" placeholder="Buscar por huésped/correo…"/>
+        </div>
+      </div>
+
+      <div class="adm-table-wrap">
+        <table class="adm-table" id="bookingsTable" aria-label="Reservas">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Habitación</th>
+              <th>Ciudad</th>
+              <th>Huésped</th>
+              <th>Correo</th>
+              <th>Entrada</th>
+              <th>Salida</th>
+              <th>Noches</th>
+              <th>Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </section>
+
+    <!-- Quejas y Reclamos -->
+    <section id="tab-quejas" class="admin-tab">
+      <div class="adm-table-wrap">
+        <table class="adm-table" id="quejasTable" aria-label="Quejas y Reclamos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Asunto</th>
+              <th>Usuario</th>
+              <th>Estado</th>
+              <th>Respuesta</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody><!-- JS --></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!--Modal responder queja-->
+  <div class="adm-overlay" id="quejaOverlay" hidden>
+    <section class="adm-modal" role="dialog" aria-modal="true" aria-labelledby="quejaModalTitle">
+      <header class="adm-modal__head">
+        <h3 id="quejaModalTitle">Responder Queja o Reclamo</h3>
+        <button class="adm-close" data-close>×</button>
+      </header>
+
+      <form id="quejaForm" class="adm-form">
+        <input type="hidden" id="quejaId">
+        <label>Respuesta del administrador
+          <textarea id="respuestaAdmin" rows="4" required></textarea>
+        </label>
+        <label>Estado
+          <select id="estadoQueja" required>
+            <option value="Resuelto">Resuelto</option>
+            <option value="Rechazado">Rechazado</option>
+          </select>
+        </label>
+        <footer class="adm-modal__foot">
+          <button type="button" class="adm-btn" data-close>Cancelar</button>
+          <button type="submit" class="adm-btn adm-btn--primary">Guardar</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- Modal de autenticación -->
+  <div class="luxe-auth" id="luxeAuth" aria-hidden="true">
+  </div>
+
+  <!-- Guardia de acceso admin -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.ErcAuth?.ensureAdminPage?.();
+    });
+  </script>
+</body>
+</html>
