@@ -1,0 +1,414 @@
+/* habitaciones */
+:root {
+  --hb-bg: #fff;
+  --hb-text: #1e293b;
+  --hb-muted: #6b7280;
+  --hb-brand: #254438;
+  --hb-soft: #f3eee7;
+  --hb-border: #e5e7eb;
+  --hb-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  --hb-radius: 20px;
+}
+
+/* Modal general  */
+.hb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  place-items: center;
+}
+.hb-modal.show { display: grid; }
+.hb-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+/* Contenedor */
+.hb-modal-dialog {
+  position: relative;
+  z-index: 2;
+  background: var(--hb-bg);
+  width: min(960px, 95vw);
+  max-height: 90vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--hb-radius);
+  box-shadow: var(--hb-shadow);
+  overflow: hidden;
+}
+.hb-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Galería */
+.hb-gallery {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  height: 440px;
+  background: #000;
+}
+.hb-slide {
+  display: grid;
+  place-items: center;
+}
+.hb-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.hb-thumbs {
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  overflow-y: auto;
+}
+.hb-thumbs img {
+  width: 90px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.hb-thumbs img.active,
+.hb-thumbs img:hover {
+  opacity: 1;
+  outline: 2px solid var(--hb-brand);
+}
+
+/*Información*/
+.hb-info {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  padding: 20px;
+  color: var(--hb-text);
+}
+.hb-name {
+  font: 800 1.5rem "Playfair Display", serif;
+  margin: 0;
+}
+.hb-sub { color: var(--hb-muted); font-size: 0.95rem; margin: 4px 0 10px; }
+.hb-list { margin: 10px 0; padding-left: 20px; font-size: 0.95rem; }
+
+/* Amenidades*/
+.hb-amenities {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.hb-am-card {
+  background: var(--hb-soft);
+  border: 1px solid var(--hb-border);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+.hb-am-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--hb-text);
+}
+
+/* Aside */
+.hb-aside {
+  background: #f9fafb;
+  border: 1px solid var(--hb-border);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-self: start;
+}
+.hb-price { font: 900 1.8rem "Inter", sans-serif; color: var(--hb-text); margin: 0; }
+.hb-price-currency { opacity: 0.6; margin-right: 2px; }
+.hb-policy { font-size: 0.8rem; color: var(--hb-muted); margin: 0; }
+.hb-cta { display: grid; gap: 8px; }
+.hb-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hb-btn-primary { background: var(--hb-brand); color: #fff; }
+.hb-btn-ghost { background: var(--hb-soft); color: var(--hb-brand); }
+
+/* Responsive*/
+@media (max-width: 850px) {
+  .hb-gallery { grid-template-columns: 1fr; height: 340px; }
+  .hb-thumbs { flex-direction: row; overflow-x: auto; height: auto; }
+  .hb-info { grid-template-columns: 1fr; }
+}
+
+/* Sección de habitaciones  */
+.section-rooms {
+  background: #f9f9f9;
+  padding: 80px 0;
+}
+.section-rooms .section-title {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.section-rooms .section-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 50px;
+}
+
+.rooms-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.room-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.room-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.room-body {
+  padding: 20px;
+}
+.room-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+.room-sub {
+  color: #6b7280;
+  margin: 6px 0 12px;
+}
+.room-price {
+  font-weight: 800;
+  color: #254438;
+  margin-bottom: 12px;
+}
+.room-body .btn {
+  background: #254438;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.room-body .btn:hover {
+  background: #365c4a;
+}
+
+/* Estados del modal */
+.hb-modal{
+  position: fixed; inset: 0; z-index: 1200;
+  display: grid; place-items: center;
+  pointer-events: none; opacity: 0;
+}
+.hb-modal.is-opening,
+.hb-modal.is-open,
+.hb-modal.is-closing{ display:grid; }
+.hb-modal.is-open{ pointer-events:auto; }
+
+/* Backdrop con blur */
+.hb-modal-backdrop{
+  position:absolute; inset:0; background: rgba(12,16,24,.36);
+  backdrop-filter: blur(2px);
+  opacity: 0; transition: opacity .35s ease;
+}
+.hb-modal.is-opening .hb-modal-backdrop,
+.hb-modal.is-open    .hb-modal-backdrop{ opacity: 1; }
+.hb-modal.is-closing .hb-modal-backdrop{ opacity: 0; }
+
+/* Card */
+.hb-modal-dialog{
+  position: relative; width: min(1120px, 96vw);
+  background: #0b0e14; /* visible durante el fade de la imagen */
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  transform: translateY(18px) scale(.965);
+  opacity: 0; will-change: transform, opacity, filter;
+}
+.hb-modal.is-opening .hb-modal-dialog{
+  animation: hbPopIn .42s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.hb-modal.is-closing .hb-modal-dialog{
+  animation: hbPopOut .28s ease forwards;
+}
+
+/* Botón cerrar */
+.hb-modal-close{
+  position:absolute; top: 10px; right: 10px;
+  width: 38px; height: 38px; border-radius: 999px;
+  border: 0; background: rgba(17,24,39,.72); color:#fff; font-size: 20px;
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  backdrop-filter: blur(6px);
+  transition: transform .06s ease, filter .2s ease, background .2s;
+  z-index: 5;
+}
+.hb-modal-close:hover{ filter: brightness(1.05); background: rgba(17,24,39,.86); }
+.hb-modal-close:active{ transform: translateY(1px) }
+
+/* Galería grande con Ken Burns sutil */
+.hb-gallery{ position: relative; background:#000; height: min(68vh, 620px); }
+.hb-slide{ position: relative; height: 100%; }
+.hb-slide img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  transform: scale(1.04);
+  animation: hbKenBurns 18s ease-in-out infinite alternate;
+  filter: saturate(1.02) contrast(1.02);
+}
+
+/* Crossfade al cambiar imagen */
+.hb-slide .is-fading-in{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  animation: hbFadeIn .35s ease forwards;
+}
+
+/* Rail de miniaturas “slide in” */
+.hb-thumbs{
+  position:absolute; right: 12px; top:12px; bottom:12px;
+  width: 104px; padding: 8px; border-radius: 14px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  display: grid; gap: 8px; overflow:auto;
+  transform: translateX(18px); opacity: 0;
+}
+.hb-modal.is-opening .hb-thumbs{ animation: hbThumbsIn .38s .12s ease forwards; }
+.hb-modal.is-closing .hb-thumbs{ opacity:0; transform: translateX(18px); }
+
+.hb-thumbs img{
+  width: 100%; aspect-ratio: 16/11; object-fit: cover; border-radius: 10px;
+  opacity: .7; outline: 2px solid transparent; cursor: pointer;
+  transition: opacity .18s ease, transform .18s ease, outline-color .18s ease;
+}
+.hb-thumbs img:hover{ opacity: .95; transform: translateY(-1px); }
+.hb-thumbs img.active{ opacity: 1; outline-color: #22c55e; }
+
+/* Info */
+.hb-info{
+  display: grid; gap: 14px; grid-template-columns: 1fr 320px;
+  padding: 14px 16px 18px; background: linear-gradient(180deg,#0b0e14,#0b0e14 60%,#0f1420);
+}
+.hb-name{ color:#fff; margin: 0 0 .35rem; font: 800 26px/1.1 "Inter", system-ui; }
+.hb-sub{ color:#cbd5e1; margin:.2rem 0 1rem; }
+
+.hb-list{ color:#e5e7eb; opacity:.95; padding-left: 18px; }
+.hb-list li{ margin:.28rem 0; }
+
+/* Price sheet animada */
+.hb-aside{
+  align-self: end; background: #0f172a; border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px; padding: 14px; display: grid; gap: 10px;
+  transform: translateY(12px); opacity: 0;
+}
+.hb-modal.is-opening .hb-aside{ animation: hbSheetUp .34s .16s ease-out forwards; }
+.hb-price{ margin:0; color:#fff; font: 900 28px/1 "Inter"; }
+.hb-policy{ color:#cbd5e1; font-size: 13px; margin:0; }
+
+/* Botones */
+.hb-btn{ border:0; border-radius:12px; padding:.8rem 1rem; font-weight:800; cursor:pointer; }
+.hb-btn-primary{ background:#22c55e; color:#0b0e14; }
+.hb-btn-ghost{ background:#111827; color:#e5e7eb; }
+
+/* Keyframes */
+@keyframes hbPopIn{
+  0%{ opacity:0; transform: translateY(22px) scale(.955); filter: blur(4px) saturate(.9); }
+  60%{ transform: translateY(-2px) scale(1.006); filter: blur(0) saturate(1.02); }
+  100%{ opacity:1; transform: none; filter:none; }
+}
+@keyframes hbPopOut{
+  to{ opacity:0; transform: translateY(12px) scale(.985); filter: blur(4px) saturate(.96); }
+}
+@keyframes hbKenBurns{
+  from{ transform: scale(1.04) translate3d(0,0,0); }
+  to  { transform: scale(1.10) translate3d(-1.2%, -1.2%, 0); }
+}
+@keyframes hbThumbsIn{
+  to{ opacity:1; transform:none; }
+}
+@keyframes hbSheetUp{
+  to{ opacity:1; transform:none; }
+}
+@keyframes hbFadeIn{
+  from{ opacity:0 }
+  to  { opacity:1 }
+}
+
+/* Respeto a reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .hb-modal-backdrop,
+  .hb-modal-dialog,
+  .hb-thumbs,
+  .hb-aside,
+  .hb-slide img{ animation: none !important; transition: none !important; }
+  .hb-modal{ opacity:1; }
+  .hb-modal-dialog{ transform:none; opacity:1; }
+  .hb-thumbs{ transform:none; opacity:1; }
+}
+
+/* Flechas del carrusel: mejor centradas y siempre arriba */
+.section-hotels .track-arrow{
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 48px; height: 48px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  backdrop-filter: blur(4px);
+  transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+}
+.section-hotels .track-arrow:hover{
+  filter: brightness(1.03);
+  box-shadow: 0 16px 36px rgba(0,0,0,.18);
+  transform: translateY(-50%) scale(1.03);
+}
+.section-hotels .track-arrow:active{
+  transform: translateY(-50%) scale(.98);
+}
+.section-hotels .track-arrow.is-disabled{
+  opacity: .35; pointer-events: none;
+}
+.section-hotels .track-arrow.prev{ left: 8px; margin-left: -36px; }
+.section-hotels .track-arrow.next{ right: 8px; margin-right: -36px; }
+/* Cursor de arrastre para el carrusel */
+.hotels-track.is-dragging{
+  cursor: grabbing;
+  user-select: none;
+}
