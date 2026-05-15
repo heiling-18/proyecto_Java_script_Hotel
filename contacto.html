@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto | El Rincón del Carmen</title>
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/contacto.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <!-- Scripts de tu app -->
+  <script src="/js/app.js" defer></script>
+  <script src="/js/auth.js" defer></script>
+  <script src="/js/contacto.js" defer></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">El Rincón del Carmen</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="reservas.html">Reservas</a>
+        <a href="contacto.html" data-active="true">Contacto</a>
+      </nav>
+      <div class="auth">
+        <a class="btn btn-login" href="#" id="btnLogin">Iniciar Sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero mejorado -->
+  <section class="hero hero--contacto" aria-label="Contáctanos">
+    <div class="hero-inner" data-reveal>
+      <span class="hero-eyebrow">El Rincón del Carmen</span>
+      <h1 class="hero-title">¿Hablamos?</h1>
+      <p class="hero-subtitle">Estamos a un mensaje de planear tu próxima escapada.</p>
+
+      <div class="hero-ctas">
+        <a href="#contactForm" class="btn-hero btn-hero--primary">Escríbenos</a>
+        <a href="#mapa" class="btn-hero btn-hero--ghost">Cómo llegar</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat"><strong>24/7</strong><span>Recepción</span></div>
+        <div class="stat"><strong>+12k</strong><span>Huéspedes felices</span></div>
+        <div class="stat"><strong>5★</strong><span>Atención</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mapa + tarjetas -->
+  <section class="contact-wrap">
+    <div class="container contact-grid">
+      <!-- Mapa con iframe -->
+      <div class="map-card" id="mapa" data-reveal>
+        <iframe 
+          id="gmap"
+          class="gmap"
+          src="https://www.google.com/maps?q=10.3910,-75.4794&z=15&output=embed"
+          width="100%" 
+          height="440" 
+          style="border:0;" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          aria-label="Mapa de ubicación">
+        </iframe>
+
+        <!-- Controles sobre el mapa -->
+        <div class="map-controls">
+          <button id="btnDirections" class="mc-btn" type="button">Cómo llegar</button>
+          <div class="mc-row">
+            <a id="gmapsLink" class="mc-chip" target="_blank" rel="noopener">Google Maps</a>
+            <a id="wazeLink" class="mc-chip" target="_blank" rel="noopener">Waze</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cómo encontrarnos -->
+      <aside class="info-cards" data-reveal>
+        <article class="info-card">
+          <h3>Dirección</h3>
+          <p id="addrTxt">Calle 123 # 4-56, Barrio Centro Histórico</p>
+          <div class="ic-actions">
+            <button class="ic-btn" data-copy="#addrTxt">Copiar</button>
+            <a class="ic-btn" id="icHowTo" target="_blank" rel="noopener">Cómo llegar</a>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <h3>Horario</h3>
+          <p>Recepción 24/7 · Check-in 3:00 pm · Check-out 12:00 m</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Teléfono & WhatsApp</h3>
+          <p><a id="telLink" href="tel:+573001112233">+57 300 111 22 33</a></p>
+          <p><a id="waLink" href="https://wa.me/573001112233" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></p>
+        </article>
+
+        <article class="info-card">
+          <h3>Correo</h3>
+          <p><a id="mailLink" href="mailto:hola@rincondelcarmen.com">hola@rincondelcarmen.com</a></p>
+        </article>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Formulario -->
+  <section class="section-contact-form">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <h2 class="section-title">Escríbenos</h2>
+        <p class="section-subtitle">Tiempo de respuesta promedio: menos de 24 horas</p>
+      </div>
+
+      <form id="contactForm" class="contact-form" novalidate data-reveal>
+        <div class="cf-row">
+          <label class="cf-field">
+            <span>Nombre</span>
+            <input type="text" id="cfName" name="name" placeholder="Tu nombre" required>
+          </label>
+          <label class="cf-field">
+            <span>Correo</span>
+            <input type="email" id="cfEmail" name="email" placeholder="tucorreo@dominio.com" required>
+          </label>
+        </div>
+
+        <div class="cf-row">
+          <label class="cf-field">
+            <span>Teléfono (opcional)</span>
+            <input type="tel" id="cfPhone" name="phone" placeholder="+57 300 000 0000">
+          </label>
+          <label class="cf-field">
+            <span>Motivo</span>
+            <select id="cfSubject" name="subject" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="consulta">Consulta general</option>
+              <option value="reserva">Soporte con reserva</option>
+              <option value="evento">Eventos/Grupos</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="cf-field">
+          <span>Mensaje</span>
+          <textarea id="cfMessage" name="message" rows="6" placeholder="Cuéntanos en qué te ayudamos" required></textarea>
+        </label>
+
+        <label class="cf-check">
+          <input type="checkbox" id="cfConsent" required>
+          <span>Acepto que me contacten para gestionar mi consulta.</span>
+        </label>
+
+        <div class="cf-actions">
+          <button class="luxe-btn" type="reset">Limpiar</button>
+          <button class="luxe-btn luxe-btn--primary" type="submit" id="cfSubmit">Enviar</button>
+        </div>
+
+        <p class="cf-msg" id="cfMsg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== AUTH LUXE MODAL (completo) ===== -->
+  <div class="luxe-auth" id="luxeAuth" aria-hidden="true">
+    <div class="luxe-auth__overlay" data-close></div>
+
+    <section class="luxe-auth__card" role="dialog" aria-modal="true" aria-labelledby="luxeAuthTitle">
+      <!-- Lado visual -->
+      <aside class="luxe-auth__side" aria-hidden="true">
+        <div class="luxe-auth__brand">
+          <span class="luxe-auth__logo">RC</span>
+          <strong>El Rincón del Carmen</strong>
+        </div>
+        <p class="luxe-auth__tag">Hospitalidad de autor</p>
+      </aside>
+
+      <!-- Panel formularios -->
+      <div class="luxe-auth__panel">
+        <header class="luxe-auth__head">
+          <h2 id="luxeAuthTitle" class="luxe-auth__title">
+            <span class="state-login">Iniciar sesión</span>
+            <span class="state-register">Crear cuenta</span>
+          </h2>
+          <button class="luxe-auth__close" data-close aria-label="Cerrar">×</button>
+        </header>
+
+        <!-- LOGIN -->
+        <form id="luxeLogin" class="luxe-form state-login" novalidate>
+          <label class="luxe-field">
+            <span>Correo electrónico</span>
+            <input type="email" name="email" placeholder="tucorreo@dominio.com" required>
+          </label>
+
+          <label class="luxe-field">
+            <span>Contraseña</span>
+            <div class="luxe-pass">
+              <input type="password" name="password" placeholder="••••••••" required>
+              <button class="luxe-eye" type="button" aria-label="Mostrar/ocultar contraseña">👁</button>
+            </div>
+          </label>
+
+          <div class="luxe-row">
+            <label class="luxe-check">
+              <input type="checkbox" name="remember">
+              <span>Recuérdame</span>
+            </label>
+            <a href="#" class="luxe-link" id="luxeForgot">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button class="luxe-btn luxe-btn--primary" type="submit">Entrar</button>
+
+          <p class="luxe-swap">
+            ¿No tienes cuenta?
+            <button class="luxe-link-btn" type="button" id="goRegister">Crear cuenta</button>
+          </p>
+
+          <p class="luxe-msg" id="luxeLoginMsg" role="status" aria-live="polite"></p>
+        </form>
+
+        <!-- REGISTRO -->
+        <form id="luxeRegister" class="luxe-form state-register" novalidate>
+          <label class="luxe-field">
+            <span>Nombre</span>
+            <input type="text" name="name" placeholder="Tu nombre" required>
+          </label>
+
+          <label class="luxe-field">
+            <span>Correo electrónico</span>
+            <input type="email" name="email" placeholder="tucorreo@dominio.com" required>
+          </label>
+
+          <label class="luxe-field">
+            <span>Contraseña</span>
+            <div class="luxe-pass">
+              <input type="password" name="password" minlength="6" placeholder="Mínimo 6 caracteres" required>
+              <button class="luxe-eye" type="button" aria-label="Mostrar/ocultar contraseña">👁</button>
+            </div>
+          </label>
+
+          <!-- WIDGET DE CONTRASEÑA -->
+          <div class="pw-widget" id="pwWidget">
+            <div class="pw-lock" aria-hidden="true">
+              <svg class="ring" viewBox="0 0 52 52" width="52" height="52">
+                <defs>
+                  <linearGradient id="pwGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%"  stop-color="#f59e0b"/>
+                    <stop offset="50%" stop-color="var(--color-brand)"/>
+                    <stop offset="100%" stop-color="#22c55e"/>
+                  </linearGradient>
+                </defs>
+                <circle class="bg"   cx="26" cy="26" r="18"></circle>
+                <circle class="prog" cx="26" cy="26" r="18"></circle>
+              </svg>
+              <span class="icon"> <svg viewBox="0 0 24 24" class="svg">
+              <path d="M12 13c2.9-3.5 4.9-4.2 7.2-3.8-1 3.1-3.2 5.1-7.2 5.7"/>
+              <path d="M12 13c-2.9-3.5-4.9-4.2-7.2-3.8 1 3.1 3.2 5.1 7.2 5.7"/>
+              <path d="M12 7c1.8 1.9 2.6 3.7 2.4 6-1.5.9-3.3.9-4.8 0-.2-2.3.6-4.1 2.4-6Z"/>
+            </svg></span>
+            </div>
+
+            <div class="pw-label" id="pwLabel">Seguridad: —</div>
+            <div class="pw-meter"><div class="fill" id="pwFill"></div></div>
+
+            <ul class="pw-tips" id="pwTips">
+              <li data-k="len">6+ caracteres</li>
+              <li data-k="uc">Mayúscula</li>
+              <li data-k="lc">Minúscula</li>
+              <li data-k="num">Número</li>
+              <li data-k="sym">Símbolo</li>
+            </ul>
+          </div>
+
+          <label class="luxe-check">
+            <input type="checkbox" name="terms" required>
+            <span>Acepto los términos y condiciones</span>
+          </label>
+
+          <button class="luxe-btn luxe-btn--primary" type="submit">Registrarme</button>
+
+          <p class="luxe-swap">
+            ¿Ya tienes cuenta?
+            <button class="luxe-link-btn" type="button" id="goLogin">Iniciar sesión</button>
+          </p>
+
+          <p class="luxe-msg" id="luxeRegMsg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+    <!-- FOOTER -->
+<footer class="luxe-footer">
+  <div class="container footer-grid">
+    <!-- Marca + País -->
+    <div class="footer-brand">
+      <a class="brand-foot" href="index.html" aria-label="Ir al inicio">
+        <span class="logo-foot">RC</span>
+        <strong>El Rincón del Carmen</strong>
+      </a>
+
+      <label class="country-select" aria-label="Seleccionar país">
+        <span class="flag">🇨🇴</span>
+        <select id="countrySelect">
+          <option value="CO" selected>Colombia</option>
+        </select>
+      </label>
+<!-- Columnas (dinámicas) -->
+      <nav class="footer-cols" aria-label="Mapa del sitio">
+        <div class="col">
+          <h4>Páginas</h4>
+          <ul id="footPages" class="foot-list"></ul>
+        </div>
+        <div class="col">
+          <h4>Secciones</h4>
+          <ul id="footSections" class="foot-list"></ul>
+        </div>
+        <div class="col">
+          <h4>Accesos rápidos</h4>
+          <ul id="footQuick" class="foot-list"></ul>
+        </div>
+      </nav>
+
+</body>
+</html>
