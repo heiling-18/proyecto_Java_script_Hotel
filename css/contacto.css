@@ -8,8 +8,12 @@
   --ring:#b8c5ff33;
 }
 
-*{box-sizing:border-box}
-.section-head{margin-bottom:1.2rem}
+*{
+    box-sizing:border-box
+  }
+.section-head{
+  margin-bottom:1.2rem
+}
 
 /* HERO FULLSCREEN LUXE*/
 .hero--contacto{
