@@ -1,11 +1,12 @@
-(()=>{
-    const track=
-    document.getElementById("roomsTrack")||
+// /js/hotel.js  — Carrusel de HABITACIONES (compat con #roomsTrack y #hotelsTrack)
+(() => {
+  const track =
+    document.getElementById("roomsTrack") ||
     document.getElementById("hotelsTrack");
-    if (!track)return;
+  if (!track) return;
 
-    const rooms=[
-        {
+  const rooms = [
+    {
       id: "r1",
       name: "Suite Vista al Mar",
       type: "Suite",
@@ -17,9 +18,9 @@
       sizeM2: 48,
       view: "Mar",
       priceNow: 612000, priceOld: 1020000, discount: 40,
-      refDate: "25 octubre 2026"
+      refDate: "25 octubre 2025"
     },
-     {
+    {
       id: "r2",
       name: "Junior Suite Jardín",
       type: "Junior Suite",
@@ -31,9 +32,9 @@
       sizeM2: 40,
       view: "Jardín",
       priceNow: 429000, priceOld: 858000, discount: 50,
-      refDate: "8 octubre 2026"
+      refDate: "8 octubre 2025"
     },
-     {
+    {
       id: "r3",
       name: "Deluxe King",
       type: "Deluxe",
@@ -45,9 +46,9 @@
       sizeM2: 32,
       view: "Ciudad",
       priceNow: 355000, priceOld: 718000, discount: 51,
-      refDate: "20 diciembre 2026"
+      refDate: "20 diciembre 2025"
     },
-      {
+    {
       id: "r4",
       name: "Doble Estándar",
       type: "Estándar",
@@ -59,27 +60,30 @@
       sizeM2: 28,
       view: "Patio",
       priceNow: 299000, priceOld: 598000, discount: 50,
-      refDate: "17 octubre 2026"
+      refDate: "17 octubre 2025"
     }
-    ];
+  ];
 
-    const formatCOP=(n)=>
-        new Intl.NumberFormat("es-CO",{
-            style:"currency",
-            currency:"COP",
-            maximumFractionDigits:0,
-        }).format(n);
-     
-    const startsHTML=(n)=>"★".repeat(n) + "☆".repeat(5 - n);
-    const nextBtn=track.querySelector(".track-arrow.next");
-    const prevBtn=track.querySelector(".track-arrow.prev");
+  /* ===== Helpers ===== */
+  const formatCOP = (n) =>
+    new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0,
+    }).format(n);
 
-    const makeCard=(r)=> {
-        const f=r.features || {};
-           const bedsTxt = `${f.beds || 1} ${f.beds === 1 ? "cama" : "camas"}`;
+  const starsHTML = (n) => "★".repeat(n) + "☆".repeat(5 - n);
+
+  const nextBtn = track.querySelector(".track-arrow.next");
+  const prevBtn = track.querySelector(".track-arrow.prev");
+
+  /* ===== Render ===== */
+  const makeCard = (r) => {
+    const f = r.features || {};
+    const bedsTxt = `${f.beds || 1} ${f.beds === 1 ? "cama" : "camas"}`;
     const paxTxt = `${r.capacity} ${r.capacity === 1 ? "huésped" : "huéspedes"}`;
     return `
-     <article class="hotel-card room-card" data-id="${r.id}">
+      <article class="hotel-card room-card" data-id="${r.id}">
         <div class="hotel-media">
           <img src="${r.image}" alt="${r.name}" loading="lazy">
           <span class="hotel-chip chip-score" title="Calificación">${r.rating.toFixed(1)}</span>
@@ -116,6 +120,7 @@
         </div>
       </article>`;
   };
+
   const frag = document.createDocumentFragment();
   const insertBeforeNode = nextBtn || null;
   rooms.forEach((r) => {
@@ -125,26 +130,34 @@
   });
   track.insertBefore(frag, insertBeforeNode);
 
-  const getStep=()=>{
-    const card=track.querySelector(".hotel-card");
-    if (!card)return 320;
-    const gap=16;
-    return Math.round(card.getBoundingClientRect().width+gap);
+  /* ===== Arrows / Navegación ===== */
+  const getStep = () => {
+    const card = track.querySelector(".hotel-card");
+    if (!card) return 320;
+    const gap = 16;
+    return Math.round(card.getBoundingClientRect().width + gap);
   };
 
-  const updateArrows = ()=> {
-    const maxScroll=Math.max(0,track.scrollWidth-track.clientWidth);
-    const x=Math.round(track.scrollLeft);
-    prevBtn?.classList.toggle("is-disabled",x <=2);
-    nextBtn?.classList.toggle("is-disabled",x>=maxScroll -2);
+  const updateArrows = () => {
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    const x = Math.round(track.scrollLeft);
+    prevBtn?.classList.toggle("is-disabled", x <= 2);
+    nextBtn?.classList.toggle("is-disabled", x >= maxScroll - 2);
   };
-  prevBtn?.addEventListener("click",()=>{
-    track.scrollBy({left:getStep(),behavior:"smooth"});
+
+  prevBtn?.addEventListener("click", () => {
+    track.scrollBy({ left: -getStep(), behavior: "smooth" });
   });
-  track.addEventListener("scroll",updateArrows);
-  window.addEventListener("resize",updateArrows);
+  nextBtn?.addEventListener("click", () => {
+    track.scrollBy({ left: getStep(), behavior: "smooth" });
+  });
+
+  track.addEventListener("scroll", updateArrows);
+  window.addEventListener("resize", updateArrows);
   updateArrows();
- let dragging = false;
+
+  /* ===== Arrastre con inercia ===== */
+  let dragging = false;
   let startX = 0;
   let startLeft = 0;
   let lastX = 0;
@@ -214,15 +227,16 @@
     }, 0);
   };
 
-
+  // Mouse
   track.addEventListener("mousedown", onDown);
   window.addEventListener("mousemove", onMove);
   window.addEventListener("mouseup", onUp);
-
+  // Touch
   track.addEventListener("touchstart", onDown, { passive: true });
   track.addEventListener("touchmove", onMove, { passive: true });
   track.addEventListener("touchend", onUp);
 
+  // Evita “click” accidental tras arrastrar
   track.addEventListener(
     "click",
     (e) => {
@@ -234,13 +248,14 @@
     true
   );
 
- 
+  /* ===== Accesibilidad: teclado ===== */
   track.setAttribute("tabindex", "0");
   track.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") nextBtn?.click();
     if (e.key === "ArrowLeft") prevBtn?.click();
   });
 
+  /* ===== CTA Reservar: enviar a /reservas con preselección ===== */
   track.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-book]");
     if (!btn) return;
@@ -248,7 +263,7 @@
     const room = rooms.find((r) => r.id === id);
     if (!room) return;
 
-
+    // Guarda la preselección para que reservas.js la lea y la muestre en "Disponibilidad"
     localStorage.setItem("rb_preselect", JSON.stringify({
       id: room.id,
       name: room.name,
@@ -266,7 +281,7 @@
       refDate: room.refDate
     }));
 
-
+    // Redirige a la página de reservas (ajusta si tu ruta/archivo es distinto)
     window.location.href = "/reservas.html#preselect";
   });
 })();

@@ -1,3 +1,4 @@
+// /js/auth-luxe.js — Auth sin alertas, diseño luxe + medidor de contraseña
 (() => {
   'use strict';
 
