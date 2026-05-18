@@ -282,6 +282,6 @@
     }));
 
     // Redirige a la página de reservas (ajusta si tu ruta/archivo es distinto)
-    window.location.href = "/reservas.html#preselect";
+    window.location.href = "reservas.html#preselect";
   });
 })();

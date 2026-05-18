@@ -56,7 +56,7 @@
     if (!el) return;
     const img  = el.querySelector('img');
     const cap  = el.querySelector('figcaption')?.textContent || '';
-    lbImg.src  = img.currentSrc || img.src;
+    lbImg.src  = "img/hotel/" + img.dataset.large;
     lbImg.alt  = img.alt || cap;
     lbCap.textContent = cap;
   };

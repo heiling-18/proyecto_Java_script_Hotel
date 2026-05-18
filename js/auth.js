@@ -2,7 +2,9 @@
   'use strict';
 
   /* ===== Utils ===== */
-  const $  = (s, r = document) => r.querySelector(s);
+  const $  = (s, r = document) => r.querySe
+  
+  ector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
   /* ===== Nodos ===== */
