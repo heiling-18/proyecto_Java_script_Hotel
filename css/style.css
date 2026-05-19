@@ -1,10 +1,10 @@
-/* reset */
+/* ========== RESET & BASE ========== */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #1f2937; }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
 
-/* variables */
+/* ========== VARIABLES ========== */
 :root{
   --color-brand:#a0522d;
   --color-brand-underline:#b57355;
@@ -43,170 +43,86 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-seri
 /* Accesibilidad */
 a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2px; }
 
-/* =========================================================
-   HEADER PREMIUM
-========================================================= */
-
+/* ========== HEADER ========== */
 .site-header{
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: sticky; top: 0; z-index: 50;
   background: var(--color-header-bg);
   border-bottom: 3px solid var(--color-border);
-  box-shadow: 0 4px 14px rgba(0,0,0,.06); /* más presencia */
 }
-
 .site-header .container{
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
-  gap: 1.5rem;
-  min-height: 78px; /* más alto = más elegante */
-  padding: 0 1.5rem;
+  gap: 1rem;
+  min-height: 64px;
 }
-
-/* Marca / Título */
 .brand{
-  font-weight: 700;
-  font-size: 1.45rem; /* más grande */
-  text-decoration: none;
-  color: var(--color-brand);
-  border-bottom: 2px solid transparent;
-  letter-spacing: -.3px;
-  transition: border-color .25s ease;
+  font-weight: 600; font-size: 1.125rem; text-decoration: none;
+  color: var(--color-brand); border-bottom: 2px solid transparent;
 }
+.brand:hover{ border-bottom-color: var(--color-brand-underline); }
 
-.brand:hover{
-  border-bottom-color: var(--color-brand-underline);
-}
-
-/* NAV */
-.nav{
-  display: flex;
-  align-items: center;
-  gap: 2rem; /* más aire */
-}
-
+.nav{ display: flex; align-items: center; gap: 1.5rem; }
 .nav a{
-  position: relative;
-  text-decoration: none;
-  color: var(--color-text);
-  padding: .35rem 0;
-  font-weight: 600;
-  transition: color .25s ease;
+  position: relative; text-decoration: none; color: var(--color-text);
+  padding: .25rem 0; transition: color .2s ease;
 }
-
-.nav a:hover{
-  color: var(--color-brand);
-}
-
-.nav a[data-active="true"]{
-  color: var(--color-brand);
-}
-
+.nav a:hover{ color: var(--color-brand); }
+.nav a[data-active="true"]{ color: var(--color-brand); }
 .nav a[data-active="true"]::after{
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  margin: 0 auto;
-  width: 32px; /* más ancho */
-  height: 3px; /* más grueso */
-  background: var(--color-brand-underline);
-  border-radius: 2px;
+  content: ""; position: absolute; left: 0; right: 0; bottom: -8px;
+  margin: 0 auto; width: 28px; height: 2px; background: var(--color-brand-underline); border-radius: 2px;
 }
 
-/* BOTONES */
 .btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: .55rem 1rem;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform .06s ease, filter .2s ease, opacity .2s;
-  user-select: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .5rem .9rem; border-radius: 8px; text-decoration: none; font-weight: 500;
+  transition: transform .06s ease, filter .2s ease, opacity .2s; user-select: none;
 }
-
-.btn:active{
-  transform: translateY(1px);
+.btn:active{ transform: translateY(1px); }
+.btn-login{ background: var(--color-button); color: var(--color-button-text); }
+.btn-login:hover{ filter: brightness(1.05); }
+.btn-hero{
+  background: var(--color-button); color: var(--color-button-text);
+  padding: .95rem 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); font-weight: 700;
 }
+.btn-hero:hover{ filter: brightness(1.06); }
 
-.btn-login{
-  background: var(--color-button);
-  color: var(--color-button-text);
-  box-shadow: 0 4px 10px rgba(0,0,0,.12);
-}
-
-.btn-login:hover{
-  filter: brightness(1.07);
-}
-
-/* HAMBURGER */
 .nav-toggle{
-  display: none;
-  width: 44px;
-  height: 38px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px;
-  cursor: pointer;
+  display: none; width: 42px; height: 36px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff;
+  align-items: center; justify-content: center; gap: 4px; padding: 6px;
 }
-
-.nav-toggle span{
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: #374151;
-  border-radius: 2px;
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
+.nav-toggle span{ display: block; width: 20px; height: 2px; background: #374151; border-radius: 2px; }
 @media (max-width: 880px){
-
-  .site-header .container{
-    grid-template-columns: auto auto auto;
-    min-height: 70px;
-  }
-
-  .nav-toggle{
-    display: inline-flex;
-  }
-
+  .site-header .container{ grid-template-columns: auto auto auto; }
+  .nav-toggle{ display: inline-flex; }
   .nav{
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: var(--color-header-bg);
-    border-bottom: 3px solid var(--color-border);
-    display: none;
-    flex-direction: column;
-    padding: 1rem 1.2rem 1.4rem;
-    gap: 1.2rem;
-    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    position: absolute; top: 64px; left: 0; right: 0;
+    background: var(--color-header-bg); border-bottom: 3px solid var(--color-border);
+    display: none; flex-direction: column; padding: .75rem 1rem 1rem; gap: 1rem;
   }
-
-  .nav.open{
-    display: flex;
-  }
-
-  .nav a{
-    font-size: 1.05rem;
-  }
+  .nav.open{ display: flex; }
 }
 
+.hero{
+  background: linear-gradient(180deg, var(--hero-start) 0%, var(--hero-end) 100%);
+  min-height: 70vh; display: grid; place-items: center; text-align: center; color: #fff;
+  position: relative; overflow: hidden;
+}
+.hero::before{ content: ""; position: absolute; inset: 0; box-shadow: inset 0 8px 20px rgba(0,0,0,.12); pointer-events: none; }
+.hero-inner{ padding: 4rem 1rem; }
+.hero-title{
+  font-size: clamp(2rem, 4vw + 1rem, 4rem);
+  line-height: 1.1; margin: 0 0 1rem; font-weight: 800; letter-spacing: .2px;
+  text-shadow: 0 2px 6px rgba(0,0,0,.18);
+}
+.hero-subtitle{
+  font-size: clamp(1rem, 1.2vw + .6rem, 1.25rem);
+  margin: 0 auto 2rem; max-width: 900px; color: rgba(255,255,255,.92);
+}
+@media (max-width: 640px){ .hero-inner{ padding: 3rem 1rem; } }
 
-/* carrusel */
+/* ========== HERO — IMAGE CAROUSEL ========== */
 .hero-slider{ position: relative; height: var(--hero-height); overflow: hidden; color: #fff; }
 .hero-track{ position: relative; width: 100%; height: 100%; }
 .hero-slide{ position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
@@ -235,7 +151,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 }
 .hero-dots button[aria-selected="true"]{ background: #fff; }
 
-/* panel */
+/* ========== HERO — GLASS PANEL PREMIUM ========== */
 .hero-glass{
   --glass-bg: rgba(18, 18, 18, .28);
   --glass-border: rgba(255,255,255,.22);
@@ -289,7 +205,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   .alt-title{ font-size: clamp(1.7rem, 6.2vw + .6rem, 2.6rem); }
 }
 
-/* carrusel*/
+/* ========== SECCIÓN: NUESTROS HOTELES (CARRUSEL) ========== */
 .section-hotels{ background: var(--color-section-bg); padding: 3rem 0 2.25rem; overflow: hidden; }
 .section-head{ text-align: center; margin-bottom: 1rem; }
 .section-title{
@@ -298,7 +214,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 }
 .section-subtitle{ margin: 0; color: #6b7280; font-size: 1.05rem; }
 
-/* Track con flechas*/
+/* Track con flechas DENTRO + arrastre */
 .hotels-track{
   position: relative; display: flex; gap: 16px;
   overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
@@ -306,13 +222,13 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   scroll-padding-left: 56px;
 }
 .hotels-track::after{ content:""; flex:0 0 8px; }
-/* Estado al arrastrar */
+/* Estado al arrastrar (lo activa el JS) */
 .hotels-track.is-dragging{
   cursor: grabbing;
   user-select: none;
   scroll-behavior: auto;
 }
-/* Fades laterales */
+/* Fades laterales para insinuar más contenido */
 .section-hotels .container{ position: relative; }
 .section-hotels .container::before,
 .section-hotels .container::after{
@@ -336,7 +252,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 .track-arrow.next{ right: 8px; margin-right: -40px; }
 .track-arrow.is-disabled{ opacity:.4; pointer-events:none; }
 
-/* Tarjeta*/
+/* Tarjeta (única definición) */
 .hotel-card{
   position: relative; scroll-snap-align: start;
   flex: 0 0 320px; background: #fff; border: 1px solid #eee; border-radius: 16px;
@@ -424,7 +340,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 .btn-card:active{ transform: translateY(1px); }
 .ref-date{ font-size:.86rem; color:#374151; }
 
-/* historia */
+/* ======= Historia (título con “pastilla” brand) ======= */
 #historia .section-head,
 .section-story .section-head{ text-align: center; }
 #historia .section-title,
@@ -449,7 +365,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   border-radius: 999px;
 }
 
-/* servicios */
+/* ========= Servicios ========= */
 .section-services{
   position: relative;
   padding: 3.2rem 0 3.6rem;
@@ -458,7 +374,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
     linear-gradient(180deg, #fff 0%, #f9f7f5 100%);
 }
 
-/* título con barra */
+/* título con barra “marca” (genérico) */
 .section-head--brand .section-title{
   display:inline-block; margin:0 auto .6rem; padding:.35rem .9rem;
   background: linear-gradient(180deg, var(--hero-start) 0%, var(--hero-end) 100%);
@@ -537,7 +453,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   border:1px dashed #d7d7d7; padding:.25rem .55rem; border-radius:999px;
 }
 
-/* cta*/
+/* CTA */
 .service-cta{
   display:inline-flex; align-items:center; justify-content:center;
   margin:0 auto; padding:.5rem .9rem; border-radius:10px;
@@ -555,6 +471,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 @media (prefers-reduced-motion: reduce){
   .service-card{ opacity:1; transform:none; }
 }
+
 /* =========================================================
    GALERÍA PREMIUM SIN HUECOS
 ========================================================= */
@@ -792,7 +709,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   background: transparent !important;
   box-shadow: none !important;
 }
-/* lux */
+/* ===== AUTH LUXE (modal premium) ===== */
 :root{
   --lux-bg: rgba(20,20,20,.45);
   --lux-stroke: rgba(255,255,255,.18);
@@ -946,7 +863,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   to{ opacity:1; transform:none; }
 }
 
-/* contraseña */
+/* ===== PASSWORD LUXURY WIDGET ===== */
 .pw-widget{
   margin-top:.6rem; display:grid; gap:.6rem; position:relative;
   --ok:#22c55e; --mid:#f59e0b; --low:#ef4444; --brand:var(--color-brand,#a0522d);
@@ -1027,7 +944,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 .pw-tips li.is-ok::before{
   content:"✓"; font-weight:900; margin-right:.4rem; color:#059669;
 }
-/* PW widget*/
+/* ==== PW widget – versión integrada y elegante (override) ==== */
 .luxe-auth__panel .pw-widget{
   margin-top:.4rem;
   padding:.85rem 1rem;
@@ -1170,7 +1087,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 a.auth-menu__item{ text-decoration:none; }
 
 
-/*Resultados de reservas*/
+/* ===== Resultados de reservas ===== */
 .res-grid{
   display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:18px;
 }
@@ -1201,7 +1118,7 @@ a.auth-menu__item{ text-decoration:none; }
 .res-sum{ list-style:none; padding-left:0; margin:.5rem 0 1rem; display:grid; gap:.35rem; }
 .res-note{ margin:0; color:#374151; font-size:.95rem; }
 
-/* Footer */
+/* ===== Footer ===== */
 .luxe-footer{
   --foot-bg: #0f1115;
   --foot-text: #e5e7eb;
