@@ -12,7 +12,7 @@
   if (!track || slides.length === 0) return;
 
   const AUTOPLAY_MS = 6000;       
-  const SWIPE_THRESHOLD = 40;     // px
+  const SWIPE_THRESHOLD = 40;     
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let index = 0;

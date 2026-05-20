@@ -471,7 +471,6 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
 @media (prefers-reduced-motion: reduce){
   .service-card{ opacity:1; transform:none; }
 }
-
 /* =========================================================
    GALERÍA PREMIUM SIN HUECOS
 ========================================================= */
@@ -717,7 +716,7 @@ a:focus, button:focus{ outline: 3px solid rgba(160,82,45,.35); outline-offset: 2
   --lux-gold: #c8a97e;
   --lux-ink: #0f172a;
   --lux-cream: #f8f6f2;
-  --auth-side-img: url('/image/pexels-minan1398-774042.jpg'); /* cambia si quieres */
+  --auth-side-img: url(/image/hotell.jpg); 
 }
 
 .luxe-auth{

@@ -3,9 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reservas rincon del carmen
-    
-  </title>
+  <title>Reservas | El Rincón del Carmen</title>
 
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/reservas.css" />
@@ -14,8 +12,6 @@
   <script src="/js/app.js" defer></script>
   <script src="/js/auth.js" defer></script>
   <script src="/js/reservas.js" defer></script>
-  <script src="/js/quejas.js" defer></script>
-  <script src="/js/luxe-pass.js" defer></script>
 </head>
 <body>
   <header class="site-header site-header--over-hero">
@@ -43,7 +39,7 @@
     </div>
   </section>
 
-  <!--Ribbon de reservas -->
+  <!-- ===== Ribbon de reservas ===== -->
   <section class="book-ribbon" id="bookRibbon" aria-label="Reserva tu habitación">
     <div class="container">
       <header class="ribbon-head">
@@ -173,10 +169,6 @@
       </div>
     </div>
   </div>
-
-  <div class="luxe-auth" id="luxeAuth" aria-hidden="true">
-  </div>
-
   <section id="myBookingsSec" class="section-hotels" hidden>
     <div class="container">
       <div class="section-head">
@@ -190,6 +182,229 @@
   <section>
     <div class="container" id="contenedorQuejas"></div>
   </section>
+  <!-- MODAL LOGIN -->
+  <div class="luxe-auth" id="luxeAuth" aria-hidden="true">
+
+    <div class="luxe-auth__overlay" data-close></div>
+
+    <section class="luxe-auth__card">
+
+      <aside class="luxe-auth__side">
+
+        <div class="luxe-auth__brand">
+          <span class="luxe-auth__logo">
+            RC
+          </span>
+
+          <strong>
+            El Rincón del Carmen
+          </strong>
+        </div>
+
+        <p class="luxe-auth__tag">
+          Hospitalidad de autor
+        </p>
+
+      </aside>
+
+
+      <div class="luxe-auth__panel">
+
+        <header class="luxe-auth__head">
+
+          <h2 id="luxeAuthTitle">
+
+            <span class="state-login">
+              Iniciar sesión
+            </span>
+
+            <span class="state-register">
+              Crear cuenta
+            </span>
+
+          </h2>
+
+          <button data-close>
+            ×
+          </button>
+
+        </header>
+
+
+        <!-- LOGIN -->
+
+        <form id="luxeLogin" class="luxe-form state-login">
+
+          <label class="luxe-field">
+
+            <span>Correo</span>
+
+            <input
+              type="email"
+              name="email"
+              required
+            >
+
+          </label>
+
+
+          <label class="luxe-field">
+
+            <span>Contraseña</span>
+
+            <div class="luxe-pass">
+
+              <input
+                type="password"
+                name="password"
+                required
+              >
+
+              <button
+                class="luxe-eye"
+                type="button"
+              >
+                👁
+              </button>
+
+            </div>
+
+          </label>
+
+          <label class="luxe-check">
+
+            <input
+              type="checkbox"
+              name="remember"
+            >
+
+            <span>
+              Recordarme
+            </span>
+
+          </label>
+
+          <button
+            class="luxe-btn luxe-btn--primary"
+            type="submit"
+          >
+            Entrar
+          </button>
+
+          <p class="luxe-swap">
+
+            ¿No tienes cuenta?
+
+            <button
+              type="button"
+              id="goRegister"
+              class="luxe-link-btn"
+            >
+              Crear cuenta
+            </button>
+
+          </p>
+
+          <p id="luxeLoginMsg"></p>
+
+        </form>
+
+
+        <!-- REGISTRO -->
+
+        <form id="luxeRegister" class="luxe-form state-register">
+
+          <label class="luxe-field">
+
+            <span>Nombre</span>
+
+            <input
+              type="text"
+              name="name"
+              required
+            >
+
+          </label>
+
+          <label class="luxe-field">
+
+            <span>Correo</span>
+
+            <input
+              type="email"
+              name="email"
+              required
+            >
+
+          </label>
+
+          <label class="luxe-field">
+
+            <span>Contraseña</span>
+
+            <div class="luxe-pass">
+
+              <input
+                type="password"
+                name="password"
+                required
+              >
+
+              <button
+                class="luxe-eye"
+                type="button"
+              >
+                👁
+              </button>
+
+            </div>
+
+          </label>
+
+          <label class="luxe-check">
+
+            <input
+              type="checkbox"
+              name="terms"
+              required
+            >
+
+            <span>
+              Acepto términos
+            </span>
+
+          </label>
+
+          <button
+            class="luxe-btn luxe-btn--primary"
+            type="submit"
+          >
+            Registrarme
+          </button>
+
+          <p class="luxe-swap">
+
+            ¿Ya tienes cuenta?
+
+            <button
+              type="button"
+              id="goLogin"
+              class="luxe-link-btn"
+            >
+              Iniciar sesión
+            </button>
+
+          </p>
+
+          <p id="luxeRegMsg"></p>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </div>
   
   <footer class="luxe-footer">
     <div class="container footer-grid">

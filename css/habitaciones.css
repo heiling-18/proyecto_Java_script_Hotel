@@ -1,4 +1,4 @@
-/* habitaciones */
+/* habitaciones.modal.css — Modal tipo ficha profesional */
 :root {
   --hb-bg: #fff;
   --hb-text: #1e293b;
@@ -10,7 +10,7 @@
   --hb-radius: 20px;
 }
 
-/* Modal general  */
+/* ===== Modal general ===== */
 .hb-modal {
   position: fixed;
   inset: 0;
@@ -26,7 +26,7 @@
   backdrop-filter: blur(3px);
 }
 
-/* Contenedor */
+/* ===== Contenedor ===== */
 .hb-modal-dialog {
   position: relative;
   z-index: 2;
@@ -54,7 +54,7 @@
   z-index: 5;
 }
 
-/* Galería */
+/* ===== Galería ===== */
 .hb-gallery {
   display: grid;
   grid-template-columns: 1fr 100px;
@@ -93,7 +93,7 @@
   outline: 2px solid var(--hb-brand);
 }
 
-/*Información*/
+/* ===== Información ===== */
 .hb-info {
   display: grid;
   grid-template-columns: 1fr 260px;
@@ -108,7 +108,7 @@
 .hb-sub { color: var(--hb-muted); font-size: 0.95rem; margin: 4px 0 10px; }
 .hb-list { margin: 10px 0; padding-left: 20px; font-size: 0.95rem; }
 
-/* Amenidades*/
+/* ===== Amenidades ===== */
 .hb-amenities {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -128,7 +128,7 @@
   color: var(--hb-text);
 }
 
-/* Aside */
+/* ===== Aside ===== */
 .hb-aside {
   background: #f9fafb;
   border: 1px solid var(--hb-border);
@@ -152,14 +152,14 @@
 .hb-btn-primary { background: var(--hb-brand); color: #fff; }
 .hb-btn-ghost { background: var(--hb-soft); color: var(--hb-brand); }
 
-/* Responsive*/
+/* ===== Responsive ===== */
 @media (max-width: 850px) {
   .hb-gallery { grid-template-columns: 1fr; height: 340px; }
   .hb-thumbs { flex-direction: row; overflow-x: auto; height: auto; }
   .hb-info { grid-template-columns: 1fr; }
 }
 
-/* Sección de habitaciones  */
+/* ===== Sección de habitaciones ===== */
 .section-rooms {
   background: #f9f9f9;
   padding: 80px 0;
@@ -230,6 +230,8 @@
 .room-body .btn:hover {
   background: #365c4a;
 }
+
+/* ===== MODAL — ANIMACIONES PRO ===== */
 
 /* Estados del modal */
 .hb-modal{
@@ -407,7 +409,8 @@
 }
 .section-hotels .track-arrow.prev{ left: 8px; margin-left: -36px; }
 .section-hotels .track-arrow.next{ right: 8px; margin-right: -36px; }
-/* Cursor de arrastre para el carrusel */
+
+/* Evitar que el arrastre seleccione texto */
 .hotels-track.is-dragging{
   cursor: grabbing;
   user-select: none;

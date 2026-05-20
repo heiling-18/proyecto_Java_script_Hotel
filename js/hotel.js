@@ -1,16 +1,15 @@
-// /js/hotel.js  — Carrusel de HABITACIONES (compat con #roomsTrack y #hotelsTrack)
 (() => {
   const track =
     document.getElementById("roomsTrack") ||
     document.getElementById("hotelsTrack");
   if (!track) return;
 
-  const rooms = [
+  const DEFAULT_ROOMS = [
     {
       id: "r1",
       name: "Suite Vista al Mar",
       type: "Suite",
-      capacity: 2,          // huéspedes
+      capacity: 2,        
       rating: 9.2,
       stars: 5,
       image: "/image/habitacion1.jpg",
@@ -64,6 +63,33 @@
     }
   ];
 
+  (function syncToStorage() {
+    try {
+      const stored = JSON.parse(localStorage.getItem("erc_rooms") || "[]");
+      const storedIds = new Set(stored.map((r) => r.id));
+
+      // Añadir sólo las que el admin no tenga todavía
+      const toAdd = DEFAULT_ROOMS.filter((r) => !storedIds.has(r.id));
+      if (toAdd.length > 0 || stored.length === 0) {
+        const merged = stored.length === 0 ? DEFAULT_ROOMS : [...stored, ...toAdd];
+        localStorage.setItem("erc_rooms", JSON.stringify(merged));
+      }
+    } catch (e) {
+      console.warn("[hotel.js] No se pudo sincronizar erc_rooms:", e);
+    }
+  })();
+
+  /* ── Leer habitaciones desde storage (incluye ediciones del admin) ── */
+  let rooms;
+  try {
+    const stored = JSON.parse(localStorage.getItem("erc_rooms") || "[]");
+    // Sólo mostrar en carrusel las que tienen los ids originales (r1-r4)
+    // o todas si el admin agregó más — ajusta este filtro según necesites
+    rooms = stored.length > 0 ? stored : DEFAULT_ROOMS;
+  } catch {
+    rooms = DEFAULT_ROOMS;
+  }
+
   /* ===== Helpers ===== */
   const formatCOP = (n) =>
     new Intl.NumberFormat("es-CO", {
@@ -82,11 +108,17 @@
     const f = r.features || {};
     const bedsTxt = `${f.beds || 1} ${f.beds === 1 ? "cama" : "camas"}`;
     const paxTxt = `${r.capacity} ${r.capacity === 1 ? "huésped" : "huéspedes"}`;
+    const discount = r.discount || (r.priceOld > r.priceNow
+      ? Math.round((1 - r.priceNow / r.priceOld) * 100)
+      : 0);
+    const refDate = r.refDate || "";
+    const rating  = r.rating  || "";
+
     return `
       <article class="hotel-card room-card" data-id="${r.id}">
         <div class="hotel-media">
           <img src="${r.image}" alt="${r.name}" loading="lazy">
-          <span class="hotel-chip chip-score" title="Calificación">${r.rating.toFixed(1)}</span>
+          ${rating ? `<span class="hotel-chip chip-score" title="Calificación">${Number(rating).toFixed(1)}</span>` : ""}
           <span class="hotel-chip chip-stars" title="Categoría">${starsHTML(r.stars)}</span>
           <span class="hotel-chip chip-view" title="Vista">${r.view}</span>
         </div>
@@ -95,26 +127,27 @@
           <h3 class="hotel-title">${r.name}</h3>
           <p class="hotel-sub">${r.type} · ${paxTxt} · ${r.sizeM2} m²</p>
 
-        <div class="hotel-features">
+          <div class="hotel-features">
             <span class="feature"><i class="fi fi-bed"></i>${bedsTxt}</span>
-            ${f.wifi ? `<span class="feature"><i class="fi fi-wifi"></i>Wi-Fi</span>` : ""}
-            ${f.minibar ? `<span class="feature"><i class="fi fi-mini"></i>Minibar</span>` : ""}
-            ${f.hotTub ? `<span class="feature"><i class="fi fi-hot-tub"></i>Jacuzzi</span>` : ""}
-            ${f.balcony ? `<span class="feature"><i class="fi fi-balcony"></i>Balcón</span>` : ""}
-            ${f.ac ? `<span class="feature"><i class="fi fi-ac"></i>A/A</span>` : ""}
-            ${f.breakfast ? `<span class="feature"><i class="fi fi-breakfast"></i>Desayuno</span>` : ""}
+            ${f.wifi      ? `<span class="feature"><i class="fi fi-wifi"></i>Wi-Fi</span>`        : ""}
+            ${f.minibar   ? `<span class="feature"><i class="fi fi-mini"></i>Minibar</span>`      : ""}
+            ${f.hotTub    ? `<span class="feature"><i class="fi fi-hot-tub"></i>Jacuzzi</span>`   : ""}
+            ${f.balcony   ? `<span class="feature"><i class="fi fi-balcony"></i>Balcón</span>`    : ""}
+            ${f.ac        ? `<span class="feature"><i class="fi fi-ac"></i>A/A</span>`            : ""}
+            ${f.breakfast ? `<span class="feature"><i class="fi fi-breakfast"></i>Desayuno</span>`: ""}
           </div>
 
           <div class="price-block">
             <div>
               <div class="price-now">${formatCOP(r.priceNow)}</div>
-              <div class="price-old">${formatCOP(r.priceOld)}</div>
+              ${r.priceOld && r.priceOld > r.priceNow
+                ? `<div class="price-old">${formatCOP(r.priceOld)}</div>` : ""}
             </div>
-            <div class="discount-badge">-${r.discount}%</div>
+            ${discount ? `<div class="discount-badge">-${discount}%</div>` : ""}
           </div>
 
           <div class="card-actions">
-            <div class="ref-date">Fecha de referencia: ${r.refDate}</div>
+            ${refDate ? `<div class="ref-date">Fecha de referencia: ${refDate}</div>` : ""}
             <button class="btn-card" data-book="${r.id}">Reservar</button>
           </div>
         </div>
@@ -134,8 +167,7 @@
   const getStep = () => {
     const card = track.querySelector(".hotel-card");
     if (!card) return 320;
-    const gap = 16;
-    return Math.round(card.getBoundingClientRect().width + gap);
+    return Math.round(card.getBoundingClientRect().width + 16);
   };
 
   const updateArrows = () => {
@@ -145,72 +177,43 @@
     nextBtn?.classList.toggle("is-disabled", x >= maxScroll - 2);
   };
 
-  prevBtn?.addEventListener("click", () => {
-    track.scrollBy({ left: -getStep(), behavior: "smooth" });
-  });
-  nextBtn?.addEventListener("click", () => {
-    track.scrollBy({ left: getStep(), behavior: "smooth" });
-  });
-
+  prevBtn?.addEventListener("click", () => track.scrollBy({ left: -getStep(), behavior: "smooth" }));
+  nextBtn?.addEventListener("click", () => track.scrollBy({ left:  getStep(), behavior: "smooth" }));
   track.addEventListener("scroll", updateArrows);
   window.addEventListener("resize", updateArrows);
   updateArrows();
 
   /* ===== Arrastre con inercia ===== */
-  let dragging = false;
-  let startX = 0;
-  let startLeft = 0;
-  let lastX = 0;
-  let lastT = 0;
-  let velocity = 0;
-  let cancelClick = false;
-  let rafMomentum = 0;
+  let dragging = false, startX = 0, startLeft = 0;
+  let lastX = 0, lastT = 0, velocity = 0;
+  let cancelClick = false, rafMomentum = 0;
 
-  const now = () => performance.now();
+  const now  = () => performance.now();
   const getX = (ev) => ("touches" in ev ? ev.touches[0].clientX : ev.clientX);
 
   const onDown = (ev) => {
-    dragging = true;
-    cancelClick = false;
-    velocity = 0;
-    startX = getX(ev);
-    startLeft = track.scrollLeft;
-    lastX = startX;
-    lastT = now();
+    dragging = true; cancelClick = false; velocity = 0;
+    startX = getX(ev); startLeft = track.scrollLeft;
+    lastX = startX; lastT = now();
     track.classList.add("is-dragging");
-    if (rafMomentum) {
-      cancelAnimationFrame(rafMomentum);
-      rafMomentum = 0;
-    }
+    if (rafMomentum) { cancelAnimationFrame(rafMomentum); rafMomentum = 0; }
   };
 
   const onMove = (ev) => {
     if (!dragging) return;
     const x = getX(ev);
-    const dx = x - startX;
-    track.scrollLeft = startLeft - dx;
-
-    // velocidad
-    const t = now();
-    const dt = Math.max(1, t - lastT);
-    velocity = (x - lastX) / dt; // px/ms
-    lastX = x;
-    lastT = t;
-
-    if (Math.abs(dx) > 4) cancelClick = true;
+    track.scrollLeft = startLeft - (x - startX);
+    const t = now(), dt = Math.max(1, t - lastT);
+    velocity = (x - lastX) / dt;
+    lastX = x; lastT = t;
+    if (Math.abs(x - startX) > 4) cancelClick = true;
   };
 
   const momentum = () => {
-    const friction = 0.95; // 0..1
-    const minV = 0.02;     // px/ms
     const step = () => {
-      velocity *= friction;
-      if (Math.abs(velocity) < minV) {
-        rafMomentum = 0;
-        updateArrows();
-        return;
-      }
-      track.scrollLeft -= velocity * 16; // ~16ms/frame
+      velocity *= 0.95;
+      if (Math.abs(velocity) < 0.02) { rafMomentum = 0; updateArrows(); return; }
+      track.scrollLeft -= velocity * 16;
       rafMomentum = requestAnimationFrame(step);
     };
     rafMomentum = requestAnimationFrame(step);
@@ -222,66 +225,43 @@
     track.classList.remove("is-dragging");
     if (Math.abs(velocity) > 0.04) momentum();
     updateArrows();
-    setTimeout(() => {
-      cancelClick = false;
-    }, 0);
+    setTimeout(() => { cancelClick = false; }, 0);
   };
 
-  // Mouse
   track.addEventListener("mousedown", onDown);
   window.addEventListener("mousemove", onMove);
   window.addEventListener("mouseup", onUp);
-  // Touch
   track.addEventListener("touchstart", onDown, { passive: true });
-  track.addEventListener("touchmove", onMove, { passive: true });
-  track.addEventListener("touchend", onUp);
+  track.addEventListener("touchmove",  onMove, { passive: true });
+  track.addEventListener("touchend",   onUp);
 
-  // Evita “click” accidental tras arrastrar
-  track.addEventListener(
-    "click",
-    (e) => {
-      if (cancelClick) {
-        e.stopPropagation();
-        e.preventDefault();
-      }
-    },
-    true
-  );
+  track.addEventListener("click", (e) => {
+    if (cancelClick) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
 
   /* ===== Accesibilidad: teclado ===== */
   track.setAttribute("tabindex", "0");
   track.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") nextBtn?.click();
-    if (e.key === "ArrowLeft") prevBtn?.click();
+    if (e.key === "ArrowLeft")  prevBtn?.click();
   });
 
-  /* ===== CTA Reservar: enviar a /reservas con preselección ===== */
+  /* ===== CTA Reservar ===== */
   track.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-book]");
     if (!btn) return;
-    const id = btn.getAttribute("data-book");
+    const id   = btn.getAttribute("data-book");
     const room = rooms.find((r) => r.id === id);
     if (!room) return;
 
-    // Guarda la preselección para que reservas.js la lea y la muestre en "Disponibilidad"
     localStorage.setItem("rb_preselect", JSON.stringify({
-      id: room.id,
-      name: room.name,
-      type: room.type,
-      capacity: room.capacity,
-      rating: room.rating,
-      stars: room.stars,
-      image: room.image,
-      features: room.features,
-      sizeM2: room.sizeM2,
-      view: room.view,
-      priceNow: room.priceNow,
-      priceOld: room.priceOld,
-      discount: room.discount,
-      refDate: room.refDate
+      id: room.id, name: room.name, type: room.type,
+      capacity: room.capacity, rating: room.rating, stars: room.stars,
+      image: room.image, features: room.features, sizeM2: room.sizeM2,
+      view: room.view, priceNow: room.priceNow, priceOld: room.priceOld,
+      discount: room.discount, refDate: room.refDate
     }));
 
-    // Redirige a la página de reservas (ajusta si tu ruta/archivo es distinto)
     window.location.href = "reservas.html#preselect";
   });
 })();

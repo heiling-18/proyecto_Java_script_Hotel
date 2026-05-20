@@ -1,14 +1,14 @@
-/* Variables y base */
+/* ===================== Variables y base ===================== */
 :root{
   --adm-bg:#0e0f12;
   --adm-panel:#16181d;
   --adm-line:#2a2e35;
   --adm-text:#eaeef5;
   --adm-soft:#a9b1bd;
-  --adm-brand:#11ff66;      /* verde del admin */
+  --adm-brand:#11ff66;   
   --adm-danger:#ef4444;
   --adm-warn:#f59e0b;
-  --adm-accent:#2563eb;     /* azul de foco */
+  --adm-accent:#2563eb;     
   --radius:14px;
 }
 
@@ -16,7 +16,7 @@
 .site-header--admin{ background:var(--adm-panel); border-bottom:1px solid var(--adm-line); }
 .nav--admin a[data-active="true"]{ color:var(--adm-brand); }
 
-/* Layout y cabecera */
+/* ===================== Layout y cabecera ===================== */
 .admin-wrap{ padding:1.2rem 0 2.4rem; }
 
 .admin-head{
@@ -26,7 +26,7 @@
   font-size:1.8rem; margin:.5rem 0 1rem; letter-spacing:.2px;
 }
 
-/*Pestañas  */
+/* ===================== Pestañas ===================== */
 .tabs{ display:flex; gap:.6rem; flex-wrap:wrap; }
 .tab{
   background:var(--adm-panel); border:1px solid var(--adm-line); color:var(--adm-soft);
@@ -34,11 +34,11 @@
 }
 .tab.is-active{ color:#111; background:var(--adm-brand); border-color:transparent; }
 
-/* Contenido por pestaña*/
+/* ===================== Contenido por pestaña ===================== */
 .admin-tab{ display:none; margin-top:1rem; }
 .admin-tab.is-active{ display:block; }
 
-/*Barra de filtros/acciones */
+/* ===================== Barra de filtros/acciones ===================== */
 .bar{ display:flex; align-items:center; justify-content:space-between; gap:.8rem; margin:.8rem 0 1rem; }
 .filters{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
 
@@ -62,7 +62,7 @@
   background:#1f0d0d; color:#fca5a5; border-color:#7f1d1d;
 }
 
-/*Tabla (base)*/
+/* ===================== Tabla (base) ===================== */
 .adm-table-wrap{
   background:var(--adm-panel); border:1px solid var(--adm-line);
   border-radius:var(--radius); overflow:auto;
@@ -71,7 +71,7 @@
   width:100%;
   border-collapse:separate;
   border-spacing:0;
-  table-layout:fixed;        /* base fija para evitar “bailes” */
+  table-layout:fixed;      
 }
 .adm-table thead th{
   text-align:left; font-weight:700; color:var(--adm-soft);
@@ -83,41 +83,12 @@
 }
 .adm-table tbody tr:hover{ background:rgba(255,255,255,.03); }
 
-/* Evitar desbordes en las tablas */
 .adm-table th, .adm-table td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/*anchos de las tablas */
-#quejasTable { table-layout: fixed; }
-
-#quejasTable th:nth-child(1),
-#quejasTable td:nth-child(1) { width: 84px; }   /* ID */
-
-#quejasTable th:nth-child(2),
-#quejasTable td:nth-child(2) { width: 120px; }  /* Fecha */
-
-#quejasTable th:nth-child(3),
-#quejasTable td:nth-child(3) { width: 100px; }  /* Tipo */
-
-#quejasTable th:nth-child(4),
-#quejasTable td:nth-child(4) { width: 220px; }  /* Asunto */
-
-#quejasTable th:nth-child(5),
-#quejasTable td:nth-child(5) { width: 160px; }  /* Usuario */
-
-#quejasTable th:nth-child(6),
-#quejasTable td:nth-child(6) { width: 140px; }  /* Estado */
-
-#quejasTable th:nth-child(7),
-#quejasTable td:nth-child(7) { width: 220px; }  /* Respuesta */
-
-#quejasTable th:nth-child(8),
-#quejasTable td:nth-child(8) { width: 260px; }  /* Acciones */
-
-/* Botones por fila*/
 .row-actions{ display:flex; gap:.4rem; }
 .icon-btn{
   border:1px solid var(--adm-line); background:var(--adm-panel); color:var(--adm-text);
@@ -127,12 +98,12 @@
 .icon-btn--danger{ border-color:#7f1d1d; background:#1f0d0d; color:#fca5a5; }
 .td-actions .adm-btn { margin-right:.4rem; }
 
-/* Mensajes vacíos*/
+/* ===================== Mensajes vacíos ===================== */
 .adm-empty{
   padding:1rem; color:var(--adm-soft); text-align:center; font-style:italic;
 }
 
-/* Overlay*/
+/* ===================== Overlay / Modal (unificado) ===================== */
 .adm-overlay{
   position:fixed; inset:0;
   background:rgba(0,0,0,.45);
@@ -197,7 +168,10 @@
   border:1px dashed var(--adm-line); border-radius:12px;
   padding:.7rem; display:flex; flex-wrap:wrap; gap:.8rem; margin:8px 0;
 }
-/* quejas resueltas */
+
+/* ===================== Estado RESUELTO (Quejas) ===================== */
+/* Antes estaba en .row-resuelto::before (sobre el <tr>) y corría las columnas.
+   Ahora pintamos la tira verde en la PRIMERA CELDA para no desalinear. */
 .row-resuelto td:first-child{ position: relative; }
 .row-resuelto td:first-child::before{
   content:"";
@@ -254,4 +228,5 @@
 .view-section h4{margin:0 0 6px;color:var(--adm-soft);text-transform:uppercase;font-size:.78rem;letter-spacing:.35px}
 .view-section .box{
   white-space:pre-wrap;background:#0f1115;border:1px solid var(--adm-line);
-  border-radius:12px;padding:10px;color:var(--adm-text)}
+  border-radius:12px;padding:10px;color:var(--adm-text)
+}

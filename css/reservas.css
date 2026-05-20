@@ -1,6 +1,5 @@
-/* reservas */
+/* ===== RESERVAS — LUXE (COMPLETO) ===== */
 :root{
-  /* fallbacks si alguien abre esta página sin style.css */
   --color-brand: #a0522d;
   --color-brand-underline:#b57355;
   --color-text:#1f2937;
@@ -14,8 +13,7 @@
   --lux-gold:#c8a97e;
 }
 
-
-/* luxe*/
+/* ======= LUXE THEME V2: Carmen ======= */
 :root{
   --brand-deep: #254438;      /* verde profundo (botones/acentos) */
   --brand-sand: #F3EEE7;      /* arena cálida (fondos suaves) */
@@ -33,7 +31,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 .hero--reservas .hero-title{ font-family:"Playfair Display", serif; letter-spacing:.4px; }
 .section-title{ font-family:"Playfair Display", serif; }
 
-/*HERO FULLSCREEN*/
+/* ===== HERO FULLSCREEN ===== */
 .hero--reservas{
   min-height: 100vh;     /* pantalla completa */
   min-height: 100svh;    /* iOS */
@@ -45,10 +43,10 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
     linear-gradient(180deg, color-mix(in oklab, var(--brand-copper) 85%, #000) 0%, var(--brand-deep) 100%);
 }
 .hero--reservas::before{
-  content:""; position:absolute; inset:0;      /* ocupa todo el viewport */
+  content:""; position:absolute; inset:0;     /* ocupa todo el viewport */
   background:
     linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45)),
-    url("/image/imagen.jpg") center/cover no-repeat;
+    url("/image/mar.jpg") center/cover no-repeat;
   filter: saturate(1.08) contrast(1.05) brightness(.96);
   z-index:0; border-radius:0;                 /* sin bordes */
   animation: heroPan 18s ease-in-out infinite alternate;
@@ -66,13 +64,14 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
   opacity:.95;
 }
 
-/* Header flotante sobre el hero en Reservas */
+/* (opcional) Header flotando sobre el hero en Reservas
+   <header class="site-header site-header--over-hero"> */
 .site-header--over-hero{
   position: absolute; inset: 0 auto auto 0; width: 100%;
   background: transparent; border-bottom: none; z-index: 5;
 }
 
-/*RIBBON FLOTANTE*/
+/* ===== RIBBON FLOTANTE ===== */
 .book-ribbon{ position:relative; z-index:2; }
 .book-ribbon .container{
   background: color-mix(in oklab, #fff 92%, var(--brand-sand) 8%);
@@ -159,7 +158,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 .rf-cta:active{ transform: translateY(0); }
 @keyframes rbShine{ from{ left:-40%; } to{ left:120%; } }
 
-/* Beneficios*/
+/* ===== Beneficios ===== */
 .benefits{ display:flex; gap:.8rem; flex-wrap:wrap; margin-top:.8rem; }
 .benefit{
   display:inline-flex; align-items:center; gap:.5rem;
@@ -170,12 +169,12 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 }
 .benefit .ic{ width:16px; height:16px; background: var(--brand-copper);
   -webkit-mask:center/contain no-repeat; mask:center/contain no-repeat; }
-.ic-cancel{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 6 6 20M6 6l14 14"/></svg>'); mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20 6 6 20M6 6l14 14'/></svg>"); }
-.ic-break{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10h18M5 6h14M7 14h10M10 18h4"/></svg>'); mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 10h18M5 6h14M7 14h10M10 18h4'/></svg>"); }
-.ic-wifi{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm6.36-2.36a10 10 0 0 0-12.72 0l1.41 1.41a8 8 0 0 1 9.9 0Zm4.24-4.24a16 16 0 0 0-23.2 0l1.41 1.41a14 14 0 0 1 20.38 0Z"/></svg>');
-          mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm6.36-2.36a10 10 0 0 0-12.72 0l1.41 1.41a8 8 0 0 1 9.9 0Zm4.24-4.24a16 16 0 0 0-23.2 0l1.41 1.41a14 14 0 0 1 20.38 0Z'/></svg>"); }
+.ic-cancel{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="/image/mar.jpg" viewBox="0 0 24 24"><path d="M20 6 6 20M6 6l14 14"/></svg>'); mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20 6 6 20M6 6l14 14'/></svg>"); }
+.ic-break{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="/image/mar.jpg" viewBox="0 0 24 24"><path d="M3 10h18M5 6h14M7 14h10M10 18h4"/></svg>'); mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 10h18M5 6h14M7 14h10M10 18h4'/></svg>"); }
+.ic-wifi{ -webkit-mask-image:url('data:image/svg+xml;utf8,<svg xmlns="/image/mar.jpg" viewBox="0 0 24 24"><path d="M12 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm6.36-2.36a10 10 0 0 0-12.72 0l1.41 1.41a8 8 0 0 1 9.9 0Zm4.24-4.24a16 16 0 0 0-23.2 0l1.41 1.41a14 14 0 0 1 20.38 0Z"/></svg>');
+          mask-image:url("data:image/svg+xml;utf8,<svg xmlns='/image/mar.jpg' viewBox='0 0 24 24'><path d='M12 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm6.36-2.36a10 10 0 0 0-12.72 0l1.41 1.41a8 8 0 0 1 9.9 0Zm4.24-4.24a16 16 0 0 0-23.2 0l1.41 1.41a14 14 0 0 1 20.38 0Z'/></svg>"); }
 
-/*Resultados*/
+/* ===== Resultados ===== */
 .res-grid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
 @media (max-width: 980px){ .res-grid{ grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 620px){ .res-grid{ grid-template-columns: 1fr; } }
@@ -224,7 +223,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 .res-cta:hover{ filter:brightness(1.07); }
 .res-cta:active{ transform: translateY(1px); }
 
-/*Drawer de confirmación*/
+/* ===== Drawer de confirmación (modal centrado) ===== */
 .res-overlay[hidden]{ display:none; }
 .res-overlay{
   position:fixed; inset:0; z-index:900; background:rgba(0,0,0,.45);
@@ -271,7 +270,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 .resv-summary .total{ grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; margin-top:.2rem; padding-top:.5rem; border-top:1px dashed #e8e1d9; }
 .resv-total{ font-size: 1.25rem; font-weight: 900; color:#111827; }
 
-/*Editar reserva */
+/* ==== Drawer “Editar reserva” (Mis reservas) ==== */
 .res-drawer--edit{
   transform: translateY(24px) scale(.985);
   opacity: 0; border-radius: 16px;
@@ -312,7 +311,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 }
 @keyframes confetti{ from{ transform:scale(.6); opacity:.9; } to{ transform:scale(1.2); opacity:0; } }
 
-/*Miscelánea / utilidades */
+/* ==== Miscelánea / utilidades ==== */
 .grid-rooms { display:grid; gap:1rem; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
 .room-card { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.08); }
 .room-card img { width:100%; height:180px; object-fit:cover; }
@@ -396,7 +395,7 @@ body{ font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, s
 .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#111827; color:#fff; padding:.6rem .9rem; border-radius:10px; opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:9999; }
 .toast.show { opacity:1; }
 
-/*Rediseño inferior del ticket */
+/* ===== Rediseño inferior del ticket ===== */
 .q-ticket__body { margin-top:.65rem; }
 
 .q-infobar {

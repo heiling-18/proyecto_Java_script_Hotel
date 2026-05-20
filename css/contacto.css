@@ -1,4 +1,4 @@
-/* PALETA & BASE  */
+/* ====== PALETA & BASE ====== */
 :root{
   --ink:#0b1320;
   --paper:#f7f6f3;
@@ -8,14 +8,10 @@
   --ring:#b8c5ff33;
 }
 
-*{
-    box-sizing:border-box
-  }
-.section-head{
-  margin-bottom:1.2rem
-}
+*{box-sizing:border-box}
+.section-head{margin-bottom:1.2rem}
 
-/* HERO FULLSCREEN LUXE*/
+/* ====== HERO FULLSCREEN LUXE ====== */
 .hero--contacto{
   height:100svh; min-height:640px;
   display:grid; place-items:center;
@@ -70,12 +66,12 @@
 }
 .hero-stats .stat span{display:block; font-weight:600; font-size:.8rem; opacity:.85}
 
-/* GRID SECCIÓN CONTACTO*/
+/* ====== GRID SECCIÓN CONTACTO ====== */
 .contact-wrap{padding:2.4rem 0}
 .contact-grid{display:grid; gap:1.6rem; grid-template-columns:1.6fr .95fr}
 @media (max-width: 980px){.contact-grid{grid-template-columns:1fr}}
 
-/*MAPA PREMIUM*/
+/* ====== MAPA PREMIUM ====== */
 .map-card{position:relative; border-radius:26px; overflow:hidden; background:#0b1320;}
 .map-card::before{
   content:""; position:absolute; inset:-1px;
@@ -96,7 +92,7 @@
 .mc-row{display:flex; gap:.5rem}
 .mc-chip{background:rgba(255,255,255,.92); color:#111; text-decoration:none}
 
-/* TARJETAS INFO  */
+/* ====== TARJETAS INFO ====== */
 .info-cards{display:grid; gap:1rem}
 .info-card{
   background:linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.66));
@@ -112,7 +108,7 @@
 }
 .info-card a{color:var(--gold-2)}
 
-/* FORMULARIO LUXE */
+/* ====== FORMULARIO LUXE ====== */
 .section-contact-form{ padding:2.4rem 0 3.2rem; }
 .contact-form{ display:flex; flex-direction:column; gap:1.1rem; }
 .cf-row{ display:grid; gap:1rem; grid-template-columns:1fr 1fr; }
@@ -138,7 +134,7 @@
 .luxe-btn--primary:hover{transform:translateY(-1px)}
 .cf-msg{ min-height:1.25rem; font-weight:700; }
 
-/*TOAST*/
+/* ====== TOAST ====== */
 #appToast{
   position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
   background:#111; color:#fff; padding:.7rem 1rem; border-radius:999px;
@@ -146,6 +142,54 @@
 }
 #appToast.show{ opacity:1; }
 
-/* REVEAL ON SCROLL*/
+/* ====== REVEAL ON SCROLL ====== */
 [data-reveal]{opacity:0; transform:translateY(18px); transition:opacity .55s ease, transform .55s ease;}
 [data-reveal].is-revealed{opacity:1; transform:none}
+.luxe-pass{
+    position: relative;
+    width: 100%;
+    display:flex;
+    align-items:center;
+}
+
+.luxe-pass input{
+    width:100%;
+    padding-right:60px !important;
+}
+
+/* Reinicia completamente el botón */
+.luxe-eye{
+    all: unset;
+
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+
+    width:24px;
+    height:24px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+    z-index:9999;
+
+    font-size:18px;
+    line-height:1;
+}
+
+.luxe-eye:hover{
+    transform:translateY(-50%) scale(1.1);
+}
+
+/* evita que algo lo tape */
+.luxe-pass input{
+    position:relative;
+    z-index:1;
+}
+
+.luxe-eye{
+    z-index:2;
+}

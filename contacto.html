@@ -9,13 +9,13 @@
   <link rel="stylesheet" href="/css/contacto.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-  <!-- Scripts de tu app -->
   <script src="/js/app.js" defer></script>
   <script src="/js/auth.js" defer></script>
   <script src="/js/contacto.js" defer></script>
   <script src="/js/luxe-pass.js" defer></script>
 </head>
 <body>
+
   <!-- Header -->
   <header class="site-header">
     <div class="container">
@@ -34,7 +34,6 @@
     </div>
   </header>
 
-  <!-- Hero mejorado -->
   <section class="hero hero--contacto" aria-label="Contáctanos">
     <div class="hero-inner" data-reveal>
       <span class="hero-eyebrow">El Rincón del Carmen</span>
@@ -57,16 +56,17 @@
   <!-- Mapa + tarjetas -->
   <section class="contact-wrap">
     <div class="container contact-grid">
+
       <!-- Mapa con iframe -->
       <div class="map-card" id="mapa" data-reveal>
-        <iframe 
+        <iframe
           id="gmap"
           class="gmap"
           src="https://www.google.com/maps?q=10.3910,-75.4794&z=15&output=embed"
-          width="100%" 
-          height="440" 
-          style="border:0;" 
-          loading="lazy" 
+          width="100%"
+          height="440"
+          style="border:0;"
+          loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           aria-label="Mapa de ubicación">
         </iframe>
@@ -108,205 +108,178 @@
           <p><a id="mailLink" href="mailto:hola@rincondelcarmen.com">hola@rincondelcarmen.com</a></p>
         </article>
       </aside>
+
     </div>
   </section>
+   <!-- MODAL LOGIN -->
+<div class="luxe-auth" id="luxeAuth" aria-hidden="true">
 
-  <!-- Formulario -->
-  <section class="section-contact-form">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <h2 class="section-title">Escríbenos</h2>
-        <p class="section-subtitle">Tiempo de respuesta promedio: menos de 24 horas</p>
+  <div class="luxe-auth__overlay" data-close></div>
+
+  <section class="luxe-auth__card">
+
+    <!-- Lado izquierdo -->
+    <aside class="luxe-auth__side">
+      <div class="luxe-auth__brand">
+        <span class="luxe-auth__logo">RC</span>
+        <strong>El Rincón del Carmen</strong>
       </div>
+      <p class="luxe-auth__tag">Hospitalidad de autor</p>
+    </aside>
 
-      <form id="contactForm" class="contact-form" novalidate data-reveal>
-        <div class="cf-row">
-          <label class="cf-field">
-            <span>Nombre</span>
-            <input type="text" id="cfName" name="name" placeholder="Tu nombre" required>
-          </label>
-          <label class="cf-field">
-            <span>Correo</span>
-            <input type="email" id="cfEmail" name="email" placeholder="tucorreo@dominio.com" required>
-          </label>
-        </div>
+    <!-- Panel derecho -->
+    <div class="luxe-auth__panel">
 
-        <div class="cf-row">
-          <label class="cf-field">
-            <span>Teléfono (opcional)</span>
-            <input type="tel" id="cfPhone" name="phone" placeholder="+57 300 000 0000">
-          </label>
-          <label class="cf-field">
-            <span>Motivo</span>
-            <select id="cfSubject" name="subject" required>
-              <option value="" selected disabled>Selecciona una opción</option>
-              <option value="consulta">Consulta general</option>
-              <option value="reserva">Soporte con reserva</option>
-              <option value="evento">Eventos/Grupos</option>
-            </select>
-          </label>
-        </div>
+      <header class="luxe-auth__head">
+        <h2 id="luxeAuthTitle">
+          <span class="state-login">Iniciar sesión</span>
+          <span class="state-register">Crear cuenta</span>
+        </h2>
 
-        <label class="cf-field">
-          <span>Mensaje</span>
-          <textarea id="cfMessage" name="message" rows="6" placeholder="Cuéntanos en qué te ayudamos" required></textarea>
+        <button type="button" data-close>×</button>
+      </header>
+
+      <!-- LOGIN -->
+      <form id="luxeLogin" class="luxe-form state-login" novalidate>
+
+        <label class="luxe-field">
+          <span>Correo electrónico</span>
+          <input
+            type="email"
+            name="email"
+            placeholder="tucorreo@dominio.com"
+            required>
         </label>
 
-        <label class="cf-check">
-          <input type="checkbox" id="cfConsent" required>
-          <span>Acepto que me contacten para gestionar mi consulta.</span>
+        <label class="luxe-field">
+          <span>Contraseña</span>
+
+          <div class="luxe-pass">
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required>
+
+            <button
+                class="luxe-eye"
+                type="button"
+                aria-label="Mostrar contraseña">
+                <span>👁️</span>
+            </button>
+          </div>
         </label>
 
-        <div class="cf-actions">
-          <button class="luxe-btn" type="reset">Limpiar</button>
-          <button class="luxe-btn luxe-btn--primary" type="submit" id="cfSubmit">Enviar</button>
-        </div>
-
-        <p class="cf-msg" id="cfMsg" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-  </section>
-
-  <!-- ===== AUTH LUXE MODAL (completo) ===== -->
-  <div class="luxe-auth" id="luxeAuth" aria-hidden="true">
-    <div class="luxe-auth__overlay" data-close></div>
-
-    <section class="luxe-auth__card" role="dialog" aria-modal="true" aria-labelledby="luxeAuthTitle">
-      <!-- Lado visual -->
-      <aside class="luxe-auth__side" aria-hidden="true">
-        <div class="luxe-auth__brand">
-          <span class="luxe-auth__logo">RC</span>
-          <strong>El Rincón del Carmen</strong>
-        </div>
-        <p class="luxe-auth__tag">Hospitalidad de autor</p>
-      </aside>
-
-      <!-- Panel formularios -->
-      <div class="luxe-auth__panel">
-        <header class="luxe-auth__head">
-          <h2 id="luxeAuthTitle" class="luxe-auth__title">
-            <span class="state-login">Iniciar sesión</span>
-            <span class="state-register">Crear cuenta</span>
-          </h2>
-          <button class="luxe-auth__close" data-close aria-label="Cerrar">×</button>
-        </header>
-
-        <!-- LOGIN -->
-        <form id="luxeLogin" class="luxe-form state-login" novalidate>
-          <label class="luxe-field">
-            <span>Correo electrónico</span>
-            <input type="email" name="email" placeholder="tucorreo@dominio.com" required>
-          </label>
-
-          <label class="luxe-field">
-            <span>Contraseña</span>
-            <div class="luxe-pass">
-              <input type="password" name="password" placeholder="••••••••" required>
-              <button class="luxe-eye" type="button" aria-label="Mostrar/ocultar contraseña">👁</button>
-            </div>
-          </label>
-
-          <div class="luxe-row">
-            <label class="luxe-check">
-              <input type="checkbox" name="remember">
-              <span>Recuérdame</span>
-            </label>
-            <a href="#" class="luxe-link" id="luxeForgot">¿Olvidaste tu contraseña?</a>
-          </div>
-
-          <button class="luxe-btn luxe-btn--primary" type="submit">Entrar</button>
-
-          <p class="luxe-swap">
-            ¿No tienes cuenta?
-            <button class="luxe-link-btn" type="button" id="goRegister">Crear cuenta</button>
-          </p>
-
-          <p class="luxe-msg" id="luxeLoginMsg" role="status" aria-live="polite"></p>
-        </form>
-
-        <!-- REGISTRO -->
-        <form id="luxeRegister" class="luxe-form state-register" novalidate>
-          <label class="luxe-field">
-            <span>Nombre</span>
-            <input type="text" name="name" placeholder="Tu nombre" required>
-          </label>
-
-          <label class="luxe-field">
-            <span>Correo electrónico</span>
-            <input type="email" name="email" placeholder="tucorreo@dominio.com" required>
-          </label>
-
-          <label class="luxe-field">
-            <span>Contraseña</span>
-            <div class="luxe-pass">
-              <input type="password" name="password" minlength="6" placeholder="Mínimo 6 caracteres" required>
-              <button class="luxe-eye" type="button" aria-label="Mostrar/ocultar contraseña">👁</button>
-            </div>
-          </label>
-
-          <!-- WIDGET DE CONTRASEÑA -->
-          <div class="pw-widget" id="pwWidget">
-            <div class="pw-lock" aria-hidden="true">
-              <svg class="ring" viewBox="0 0 52 52" width="52" height="52">
-                <defs>
-                  <linearGradient id="pwGradient" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%"  stop-color="#f59e0b"/>
-                    <stop offset="50%" stop-color="var(--color-brand)"/>
-                    <stop offset="100%" stop-color="#22c55e"/>
-                  </linearGradient>
-                </defs>
-                <circle class="bg"   cx="26" cy="26" r="18"></circle>
-                <circle class="prog" cx="26" cy="26" r="18"></circle>
-              </svg>
-              <span class="icon">🔒</span>
-            </div>
-
-            <div class="pw-label" id="pwLabel">Seguridad: —</div>
-            <div class="pw-meter"><div class="fill" id="pwFill"></div></div>
-
-            <ul class="pw-tips" id="pwTips">
-              <li data-k="len">6+ caracteres</li>
-              <li data-k="uc">Mayúscula</li>
-              <li data-k="lc">Minúscula</li>
-              <li data-k="num">Número</li>
-              <li data-k="sym">Símbolo</li>
-            </ul>
-          </div>
+        <div class="luxe-row">
 
           <label class="luxe-check">
-            <input type="checkbox" name="terms" required>
-            <span>Acepto los términos y condiciones</span>
+            <input type="checkbox" name="remember">
+            <span>Recordarme</span>
           </label>
 
-          <button class="luxe-btn luxe-btn--primary" type="submit">Registrarme</button>
+          <a href="#" class="luxe-link" id="luxeForgot">
+            ¿Olvidaste tu contraseña?
+          </a>
 
-          <p class="luxe-swap">
-            ¿Ya tienes cuenta?
-            <button class="luxe-link-btn" type="button" id="goLogin">Iniciar sesión</button>
-          </p>
+        </div>
 
-          <p class="luxe-msg" id="luxeRegMsg" role="status" aria-live="polite"></p>
-        </form>
+        <button class="luxe-btn luxe-btn--primary" type="submit">
+          Entrar
+        </button>
+
+        <p class="luxe-swap">
+          ¿No tienes cuenta?
+
+          <button
+            type="button"
+            id="goRegister"
+            class="luxe-link-btn">
+            Crear cuenta
+          </button>
+        </p>
+
+        <p class="luxe-msg" id="luxeLoginMsg"></p>
+
+      </form>
+
+      <!-- REGISTRO -->
+      <form id="luxeRegister" class="luxe-form state-register" novalidate>
+
+        <label class="luxe-field">
+          <span>Nombre</span>
+          <input type="text" name="name" required>
+        </label>
+
+        <label class="luxe-field">
+          <span>Correo electrónico</span>
+          <input type="email" name="email" required>
+        </label>
+
+        <label class="luxe-field">
+          <span>Contraseña</span>
+
+          <div class="luxe-pass">
+            <input
+              type="password"
+              name="password"
+              minlength="6"
+              required>
+
+            <button
+              class="luxe-eye"
+              type="button"
+              aria-label="Mostrar contraseña">
+              👁
+            </button>
+          </div>
+        </label>
+
+        <label class="luxe-check">
+          <input type="checkbox" name="terms" required>
+          <span>Acepto términos</span>
+        </label>
+
+        <button class="luxe-btn luxe-btn--primary" type="submit">
+          Registrarme
+        </button>
+
+        <p class="luxe-swap">
+          ¿Ya tienes cuenta?
+
+          <button
+            type="button"
+            id="goLogin"
+            class="luxe-link-btn">
+            Iniciar sesión
+          </button>
+        </p>
+
+        <p class="luxe-msg" id="luxeRegMsg"></p>
+
+      </form>
+
+    </div>
+  </section> 
+
+</div>
+
+  <!-- FOOTER -->
+  <footer class="luxe-footer">
+    <div class="container footer-grid">
+
+      <div class="footer-brand">
+        <a class="brand-foot" href="index.html" aria-label="Ir al inicio">
+          <span class="logo-foot">RC</span>
+          <strong>El Rincón del Carmen</strong>
+        </a>
+        <label class="country-select" aria-label="Seleccionar país">
+          <span class="flag">🇨🇴</span>
+          <select id="countrySelect">
+            <option value="CO" selected>Colombia</option>
+          </select>
+        </label>
       </div>
-    </section>
-  </div>
-    <!-- ======= FOOTER ======= -->
-<footer class="luxe-footer">
-  <div class="container footer-grid">
-    <!-- Marca + País -->
-    <div class="footer-brand">
-      <a class="brand-foot" href="index.html" aria-label="Ir al inicio">
-        <span class="logo-foot">RC</span>
-        <strong>El Rincón del Carmen</strong>
-      </a>
 
-      <label class="country-select" aria-label="Seleccionar país">
-        <span class="flag">🇨🇴</span>
-        <select id="countrySelect">
-          <option value="CO" selected>Colombia</option>
-        </select>
-      </label>
-<!-- Columnas (dinámicas) -->
       <nav class="footer-cols" aria-label="Mapa del sitio">
         <div class="col">
           <h4>Páginas</h4>
@@ -321,6 +294,9 @@
           <ul id="footQuick" class="foot-list"></ul>
         </div>
       </nav>
+
+    </div>
+  </footer>
 
 </body>
 </html>
