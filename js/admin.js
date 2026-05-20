@@ -1,6 +1,7 @@
 (() => {
   'use strict';
 
+  // Módulo administrativo para gestión de habitaciones y reservas.
   const $  = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
@@ -8,6 +9,7 @@
   const LS_ROOMS    = 'erc_rooms';
   const LS_BOOKINGS = 'erc_reservas';
 
+  // Lectura/escritura de datos de habitaciones y reservas en localStorage.
   const getRoomsRaw  = () => { try { return JSON.parse(localStorage.getItem(LS_ROOMS) || '[]'); } catch { return []; } };
   const saveRoomsRaw = (arr) => localStorage.setItem(LS_ROOMS, JSON.stringify(arr));
   const getBookings  = () => { try { return JSON.parse(localStorage.getItem(LS_BOOKINGS) || '[]'); } catch { return []; } };
@@ -73,7 +75,8 @@
     }
   ];
 
-  // Ejecutar seed INMEDIATAMENTE (no esperar DOMContentLoaded ni auth)
+  // Rellena datos iniciales de habitaciones si no hay nada guardado.
+  // Esto permite arrancar la sección admin con contenido de ejemplo.
   (function seedNow() {
     try {
       const existing = getRoomsRaw();
@@ -87,6 +90,7 @@
   })();
 
   /* ================== Utils ================== */
+  // Funciones utilitarias para formateo, fechas y cálculo de reservas.
   const formatCOP = (n) => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(n)||0);
   const toISO     = (d) => { const dt = new Date(d); dt.setHours(12,0,0,0); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; };
   const fmtDate   = (iso) => { try { return toISO(new Date(iso)); } catch { return iso || '—'; } };
@@ -122,6 +126,7 @@
   const saveRooms = (arr) => saveRoomsRaw(arr.map(denormalize));
 
   /* ================== Tabs / Secciones ================== */
+  // Controla las pestañas de la interfaz admin: habitaciones, reservas y quejas.
   const tabButtons = $$('.tabs .tab');
   const sections   = { rooms: $('#tab-rooms'), bookings: $('#tab-bookings'), quejas: $('#tab-quejas') };
 
@@ -482,6 +487,7 @@
   }
 
   /* ================== Render Habitaciones ================== */
+  // Genera la tabla de habitaciones según filtros y búsqueda.
   function renderRooms(){
     if (!roomsTbody) return;
     const rooms  = getRooms();

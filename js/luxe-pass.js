@@ -2,19 +2,23 @@
 (() => {
   'use strict';
 
+  // Gestor de autenticación local con diseño "luxe" y medidor de seguridad de contraseña.
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
   // ====== Storage
+  // Claves de localStorage / sessionStorage para usuarios y sesión.
   const LS_USERS   = 'erc_users';
   const LS_SESSION = 'erc_session';
 
+  // Lee la lista de usuarios guardada en localStorage.
   const getUsers = () => {
     try { return JSON.parse(localStorage.getItem(LS_USERS)) || []; }
     catch { return []; }
   };
   const saveUsers = (arr) => localStorage.setItem(LS_USERS, JSON.stringify(arr));
 
+  // Recupera la sesión actual de sessionStorage o localStorage.
   const getSession = () => {
     try {
       return JSON.parse(sessionStorage.getItem(LS_SESSION) || localStorage.getItem(LS_SESSION)) || null;
@@ -24,6 +28,7 @@
     const str = JSON.stringify(obj);
     sessionStorage.removeItem(LS_SESSION);
     localStorage.removeItem(LS_SESSION);
+    // Guardar sesión en localStorage si el usuario quiere recordar su login.
     (remember ? localStorage : sessionStorage).setItem(LS_SESSION, str);
   };
   const clearSession = () => {
@@ -32,8 +37,10 @@
   };
 
   // ====== Utils
+  // Valida que el texto tenga formato de correo electrónico.
   const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
+  // Crea un hash ligero de la contraseña para no guardar texto plano.
   async function weakHash(str) {
     if (window.crypto?.subtle) {
       const enc = new TextEncoder().encode(str);
@@ -45,8 +52,10 @@
   }
 
   // ====== Password strength widget
+  // Constante usada para animar el círculo del medidor de contraseña.
   const CIRC = 113;
 
+  // Calcula la fuerza de la contraseña según longitud y tipos de caracteres.
   function scorePassword(v) {
     const parts = {
       len: v.length >= 6,
@@ -69,6 +78,7 @@
     return { score: s, state, label, parts };
   }
 
+  // Crea pequeñas chispas visuales cuando la contraseña es fuerte.
   function spawnSparks(lock) {
     for (let i = 0; i < 3; i++) {
       const s = document.createElement('i');
@@ -82,6 +92,7 @@
     }
   }
 
+  // Actualiza el widget visual de fuerza de contraseña en la interfaz.
   function updatePwWidget(v) {
     const pwWidget = $('#pwWidget');
     if (!pwWidget) return;
@@ -107,6 +118,7 @@
   }
 
   // ====== Todo el DOM dentro de DOMContentLoaded
+  // Espera a que el HTML esté cargado antes de buscar elementos e inicializar eventos.
   document.addEventListener('DOMContentLoaded', () => {
 
     const modal   = $('#luxeAuth');
@@ -116,6 +128,7 @@
     const msgLogin= $('#luxeLoginMsg');
     const msgReg  = $('#luxeRegMsg');
 
+    // Muestra mensajes de error/éxito en los formularios de login y registro.
     const setMsg = (el, text = '', cls = '') => {
       if (!el) return;
       el.textContent = text;
@@ -123,6 +136,7 @@
     };
     const cleanMsgs = () => { setMsg(msgLogin); setMsg(msgReg); };
 
+    // Abre el modal de login o registro según el parametro.
     const openModal = (register = false) => {
       if (!modal || !card) return;
       card.classList.toggle('is-register', !!register);
@@ -134,6 +148,7 @@
       if (register) setTimeout(() => updatePwWidget($('#luxeRegister input[name="password"]')?.value || ''), 0);
     };
 
+    // Cierra el modal de autenticación y limpia estados.
     const closeModal = () => {
       if (!modal) return;
       modal.classList.remove('is-open');
@@ -144,7 +159,7 @@
       updatePwWidget('');
     };
 
-    // Mostrar/ocultar contraseña
+    // Mostrar/ocultar contraseña al hacer clic en el icono de ojo.
     modal?.addEventListener('click', (e) => {
       const btn = e.target.closest('.luxe-eye');
       if (!btn) return;
@@ -152,7 +167,7 @@
       if (input) input.type = (input.type === 'password' ? 'text' : 'password');
     });
 
-    // ── Botón login del header ── AQUÍ está el fix: todo dentro de DOMContentLoaded
+    // ── Botón login del header ── Reemplaza el botón original para evitar eventos duplicados.
     const btnOpen = document.getElementById('btnLogin');
     if (btnOpen && btnOpen.parentNode) {
       const clone = btnOpen.cloneNode(true);
@@ -190,6 +205,7 @@
     });
 
     // ====== Registro
+    // Captura el envío del formulario de registro y valida los datos.
     fReg?.addEventListener('submit', async (e) => {
       e.preventDefault();
       cleanMsgs();
@@ -216,6 +232,7 @@
     });
 
     // ====== Login
+    // Captura el envío del formulario de login y valida el usuario.
     fLogin?.addEventListener('submit', async (e) => {
       e.preventDefault();
       cleanMsgs();

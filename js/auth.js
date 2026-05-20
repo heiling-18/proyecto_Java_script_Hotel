@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  // Módulo local de autenticación para demostración.
+  // No es un backend seguro, solo gestiona usuarios y sesión en el navegador.
   /* ===== Utils ===== */
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -9,12 +11,14 @@
   const LS_USERS   = 'erc_users';
   const LS_SESSION = 'erc_session';
 
+  // Usuarios almacenados en localStorage para demo.
   const getUsers = () => {
     try { return JSON.parse(localStorage.getItem(LS_USERS)) || []; }
     catch { return []; }
   };
   const saveUsers = (arr) => localStorage.setItem(LS_USERS, JSON.stringify(arr));
 
+  // Sesión actual guardada en sessionStorage o localStorage según el checkbox de recordar.
   const getSession = () => {
     try {
       const s = JSON.parse(sessionStorage.getItem(LS_SESSION) || localStorage.getItem(LS_SESSION)) || null;
@@ -52,6 +56,7 @@
   }
 
   /* ===== Seeding: crea admin si no existe ===== */
+  // Inserta un usuario administrador por defecto para facilitar la demo.
   async function seedAdmin() {
     const users = getUsers();
     const targetEmail = 'admin@hotelrincondelcarmen.com';
@@ -64,6 +69,7 @@
   }
 
   /* ===== UI helpers ===== */
+  // Muestra mensajes de estado en el formulario de login o registro.
   const setMsg = (el, text = '', cls = '') => {
     if (!el) return;
     el.textContent = text;
@@ -237,6 +243,7 @@
   });
 
   /* ===== Mini menú de usuario en header ===== */
+  // Actualiza el botón de acceso por el mini menú de usuario tras iniciar sesión.
   function updateHeaderUI() {
     const s = getSession();
     const loginBtn = document.getElementById('btnLogin');
@@ -293,6 +300,7 @@
   }
 
   /* ===== Password Strength Widget ===== */
+  // Muestra una barra de fuerza de contraseña durante el registro.
   function initPwWidget() {
     const widget    = document.querySelector('#pwWidget');
     const passInput = document.querySelector('#luxeRegister input[name="password"]');

@@ -1,39 +1,44 @@
 (() => {
-  const form = document.getElementById("bookingForm");
-  if (!form) return;
+  // Gestión de búsqueda y reserva en la página de reservas.
+  const form = document.getElementById("bookingForm"); // busca el formulario principal de reservas
+  if (!form) return; // si no existe el formulario, no ejecuta nada
 
-  const checkin    = document.getElementById("checkin");
-  const checkout   = document.getElementById("checkout");
-  const guests     = document.getElementById("guests");
-  const citySel    = document.getElementById("city");
+  // Referencias a los campos y elementos de la interfaz de búsqueda.
+  const checkin    = document.getElementById("checkin"); // fecha de entrada
+  const checkout   = document.getElementById("checkout"); // fecha de salida
+  const guests     = document.getElementById("guests"); // número de huéspedes
+  const citySel    = document.getElementById("city"); // selector de ciudad
 
-  const nightsChip = document.getElementById("rbNights");
-  const grid       = document.getElementById("resultsGrid");
-  const resMsg     = document.getElementById("resMsg");
-  const resTitle   = document.getElementById("resTitle");
-  const resSubtitle= document.getElementById("resSubtitle");
+  const nightsChip = document.getElementById("rbNights"); // elemento que muestra noches calculadas
+  const grid       = document.getElementById("resultsGrid"); // contenedor de resultados
+  const resMsg     = document.getElementById("resMsg"); // mensaje de estado en resultados
+  const resTitle   = document.getElementById("resTitle"); // título de resultados
+  const resSubtitle= document.getElementById("resSubtitle"); // subtítulo de resultados
 
-  const overlay    = document.getElementById("resOverlay");
-  const drawer     = overlay?.querySelector(".res-drawer");
-  const bodyDrawer = document.getElementById("resvBody");
-  const btnClose   = document.getElementById("resClose");
-  const btnCancel  = document.getElementById("resCancel");
-  const btnConfirm = document.getElementById("resConfirm");
-  if (btnConfirm) btnConfirm.textContent = "Sí";
+  const overlay    = document.getElementById("resOverlay"); // overlay del drawer de reserva
+  const drawer     = overlay?.querySelector(".res-drawer"); // panel lateral de reserva
+  const bodyDrawer = document.getElementById("resvBody"); // cuerpo del drawer para inyectar HTML
+  const btnClose   = document.getElementById("resClose"); // botón cerrar drawer
+  const btnCancel  = document.getElementById("resCancel"); // botón cancelar drawer
+  const btnConfirm = document.getElementById("resConfirm"); // botón confirmar reserva
+  if (btnConfirm) btnConfirm.textContent = "Sí"; // cambia el texto del botón a "Sí"
 
+  // Si el usuario no está autenticado, muestra el drawer y abre el modal de login.
   function showLoginOverDrawer(){
-    overlay?.classList.add('auth-on-top');
-    window.ErcAuth?.openLogin?.();
-    const cleanup = () => overlay?.classList.remove('auth-on-top');
-    window.addEventListener('auth:login',  cleanup, { once:true });
-    window.addEventListener('auth:logout', cleanup, { once:true });
-    const auth = document.getElementById('luxeAuth');
+    overlay?.classList.add('auth-on-top'); // marca el drawer para poner la auth encima
+    window.ErcAuth?.openLogin?.(); // abre el modal de login global
+    const cleanup = () => overlay?.classList.remove('auth-on-top'); // limpia el estilo al cerrar
+    window.addEventListener('auth:login',  cleanup, { once:true }); // al loguearse, limpia
+    window.addEventListener('auth:logout', cleanup, { once:true }); // al cerrar sesión, limpia
+    const auth = document.getElementById('luxeAuth'); // busca el modal de auth
     if (auth) {
-      const closes = auth.querySelectorAll('[data-close], .luxe-auth__overlay');
+      const closes = auth.querySelectorAll('[data-close], .luxe-auth__overlay'); // elementos que cierran modal
       closes.forEach(el => el.addEventListener('click', cleanup, { once:true }));
     }
   }
 
+  // Lista de habitaciones de demostración que siempre están disponibles.
+  // Cada habitación tiene propiedades de precio, capacidad y características.
   const demoRooms = [
     { id:"r1", city:"Cartagena",   name:"Suite Vista al Mar", type:"Suite", capacity:2, stars:5, image:"/image/habitacion1.jpg",
       features:{ beds:1, wifi:true, minibar:true, hotTub:true, balcony:true, ac:true, breakfast:true },
@@ -49,6 +54,7 @@
       sizeM2:28, view:"Patio", priceNow:299000, priceOld:598000 }
   ];
 
+  // Fechas ocupadas fijas usadas para comprobar disponibilidad en demo.
   const busy = [
     { roomId:"r1", start:"2025-10-07", end:"2025-10-09" },
     { roomId:"r1", start:"2025-12-24", end:"2025-12-27" },
@@ -57,33 +63,36 @@
     { roomId:"r4", start:"2025-10-20", end:"2025-10-23" }
   ];
 
+  // Lee habitaciones guardadas en localStorage además de las de demo.
   const LS_ROOMS = 'erc_rooms';
   const getLSRooms = () => {
-    try { 
-      const v = JSON.parse(localStorage.getItem(LS_ROOMS) || "[]");
-      return Array.isArray(v) ? v : [];
-    } catch { return []; }
+    try {
+      const v = JSON.parse(localStorage.getItem(LS_ROOMS) || "[]"); // obtiene el arreglo guardado o array vacío
+      return Array.isArray(v) ? v : []; // asegura que sea un arreglo
+    } catch { return []; } // si la lectura falla, devuelve arreglo vacío
   };
 
+  // Unifica las habitaciones demo y las que están en localStorage, eliminando duplicados.
   function allRooms(){
-    const raw = [...demoRooms, ...getLSRooms()];
-    const map = new Map();
+    const raw = [...demoRooms, ...getLSRooms()]; // concatena ambas listas
+    const map = new Map(); // usa Map para evitar duplicados por id o nombre+ciudad
     for (const r of raw) {
-      if (!r || typeof r !== 'object') continue;
-      const id  = String(r.id || '').trim();
-      const key = id || `${String(r.city||'').trim()}|${String(r.name||'').trim()}`;
-      if (!map.has(key)) map.set(key, r);
+      if (!r || typeof r !== 'object') continue; // ignora valores inválidos
+      const id  = String(r.id || '').trim(); // identificador de habitación
+      const key = id || `${String(r.city||'').trim()}|${String(r.name||'').trim()}`; // usa id o combinación ciudad+nombre
+      if (!map.has(key)) map.set(key, r); // guarda solo la primera ocurrencia
     }
-    return [...map.values()];
+    return [...map.values()]; // devuelve array de habitaciones únicas
   }
 
-  window.__ERC_ROOMS = allRooms();
+  window.__ERC_ROOMS = allRooms(); // exporta la lista global unificada de habitaciones
 
   /* ========== PRESELECCIÓN QUE VIENE DESDE HOTEL.JS ========== */
+  // Normaliza una habitación preseleccionada para que siempre tenga campos esperados.
   function upsertPreselectRoom(pre) {
     if (!pre || typeof pre !== 'object') return null;
     const normalized = {
-      id: pre.id || `pre_${Date.now()}`,
+      id: pre.id || `pre_${Date.now()}`, // genera id propia si no existe
       city: pre.city || '-',
       name: pre.name || 'Habitación',
       type: pre.type || '',
@@ -96,83 +105,90 @@
       priceNow: Number(pre.priceNow || 0),
       priceOld: Number(pre.priceOld || pre.priceNow || 0)
     };
-    const found = allRooms().find(r => r.id === normalized.id);
-    return found || normalized;
+    const found = allRooms().find(r => r.id === normalized.id); // busca si ya existe en la lista global
+    return found || normalized; // devuelve el existente o el normalizado nuevo
   }
 
+  // Si se abrió la página desde un preseleccionado, carga esa habitación y la muestra.
   function handlePreselectIfAny() {
-    const raw = localStorage.getItem('rb_preselect');
+    const raw = localStorage.getItem('rb_preselect'); // lee preselección guardada
     if (!raw) return;
 
     let pre = null;
-    try { pre = JSON.parse(raw); } catch { pre = null; }
-    localStorage.removeItem('rb_preselect');
+    try { pre = JSON.parse(raw); } catch { pre = null; } // parsea JSON con defensa
+    localStorage.removeItem('rb_preselect'); // borra la preselección después de usarla
     if (!pre) return;
 
-    const r = upsertPreselectRoom(pre);
+    const r = upsertPreselectRoom(pre); // obtiene habitación normalizada
     if (!r) return;
 
-    const today = new Date(); today.setHours(12,0,0,0);
-    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+    const today = new Date(); today.setHours(12,0,0,0); // hoy al mediodía para evitar cambios de zona
+    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1); // mañana
 
-    if (!checkin.value)  checkin.value  = toISO(today);
-    if (!checkout.value) checkout.value = toISO(tomorrow);
+    if (!checkin.value)  checkin.value  = toISO(today); // si no hay checkin, pone hoy
+    if (!checkout.value) checkout.value = toISO(tomorrow); // si no hay checkout, pone mañana
 
     (function syncMins(){
-      const inD = parseLocal(checkin.value);
+      const inD = parseLocal(checkin.value); // parsea fecha de entrada
       if (inD) {
-        const minOut = new Date(inD); minOut.setDate(minOut.getDate() + 1);
+        const minOut = new Date(inD); minOut.setDate(minOut.getDate() + 1); // salida mínima 1 día después
         checkout.min = toISO(minOut);
       }
-      renderNightsChip();
+      renderNightsChip(); // actualiza chip de noches
     })();
 
     const inD  = parseLocal(checkin.value);
     const outD = parseLocal(checkout.value);
-    if (!inD || !outD || outD <= inD) return;
+    if (!inD || !outD || outD <= inD) return; // no continúa si fechas inválidas
 
     const nights = diffDays(inD, outD);
     resTitle.textContent = 'Disponibilidad';
     resSubtitle.textContent = `Del ${toISO(inD)} al ${toISO(outD)} · ${nights} noche${nights>1?"s":""} · ${guests.value || 1} persona${(parseInt(guests.value||"1",10)>1)?"s":""}`;
 
-    renderResults([r], nights);
+    renderResults([r], nights); // muestra solo la habitación preseleccionada
 
     if (location.hash.includes('preselect')) {
-      setTimeout(() => grid?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+      setTimeout(() => grid?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80); // baja al grid si viene de hash
     }
   }
 
   /* ========== STORAGE RESERVAS ========== */
+  // Persistencia de reservas confirmadas en localStorage.
   const LS_BOOKINGS = "erc_reservas";
-  const getBookings   = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || "[]");
-  const saveBookings  = (arr) => localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr));
+  const getBookings   = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || "[]"); // lee reservas guardadas
+  const saveBookings  = (arr) => localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr)); // guarda reservas
 
   /* ========== HELPERS ========== */
+  // Convierte fechas a formato ISO local yyyy-mm-dd para inputs de tipo date.
   const toISO = (d) => {
-    const dt = new Date(d);
-    dt.setHours(12,0,0,0);
+    const dt = new Date(d); // crea fecha desde valor recibido
+    dt.setHours(12,0,0,0); // se fija al mediodía para evitar desfases por zona horaria
     const y = dt.getFullYear();
     const m = String(dt.getMonth()+1).padStart(2,"0");
     const day = String(dt.getDate()).padStart(2,"0");
     return `${y}-${m}-${day}`;
   };
-  const parseLocal  = (s) => (s ? new Date(`${s}T12:00:00`) : null);
-  const diffDays    = (a,b) => Math.round((b-a) / 86400000);
-  const formatCOP   = (n) => new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n);
-  const starsHTML   = (n) => "★".repeat(n) + "☆".repeat(5-n);
-  const overlap     = (A,B,C,D) => (A < D) && (C < B);
+  const parseLocal  = (s) => (s ? new Date(`${s}T12:00:00`) : null); // parsea string yyyy-mm-dd como fecha local
+  const diffDays    = (a,b) => Math.round((b-a) / 86400000); // diferencia de días entre fechas
+  const formatCOP   = (n) => new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n); // formatea pesos colombianos
+  const starsHTML   = (n) => "★".repeat(n) + "☆".repeat(5-n); // transforma rating en estrellas
+  const overlap     = (A,B,C,D) => (A < D) && (C < B); // calcula si dos rangos de fechas se solapan
 
+  // Verifica si una habitación está libre en un rango de fechas comparando con ocupaciones conocidas.
   function isRoomFree(roomId, start, end){
+    // revisa bloqueos fijos del demo
     for (const b of busy.filter(x=>x.roomId===roomId)){
       if (overlap(start, end, parseLocal(b.start), parseLocal(b.end))) return false;
     }
+    // revisa reservas ya guardadas en localStorage
     for (const r of getBookings().filter(x=>x.roomId===roomId)){
       const rs = new Date(r.start), re = new Date(r.end);
       if (overlap(start, end, rs, re)) return false;
     }
-    return true;
+    return true; // si no hubo solapamientos, está libre
   }
 
+  // Comprueba si el usuario ya tiene otra reserva que se cruza con el rango seleccionado.
   function userHasBookingOverlap(email, start, end){
     if (!email) return false;
     return getBookings().some(b =>
@@ -181,6 +197,7 @@
     );
   }
 
+  // Muestra un chip con el número de noches calculado entre checkin y checkout.
   function renderNightsChip(){
     const a = parseLocal(checkin.value);
     const b = parseLocal(checkout.value);
@@ -194,7 +211,7 @@
     }
   }
 
-  // Fechas mínimas
+  // Establece fechas mínimas válidas para los inputs de reserva.
   const today = new Date(); today.setHours(12,0,0,0);
   const isoToday = toISO(today);
   checkin.min  = isoToday;
@@ -214,6 +231,7 @@
   renderNightsChip();
 
   /* ========== POBLAR SELECT DE CIUDADES (seguro) ========== */
+  // Llena el selector de ciudades con valores únicos de las habitaciones disponibles.
   function populateCities(){
     if (!citySel) return;
 
@@ -230,10 +248,11 @@
   }
   populateCities();
 
-  // Procesa preselección si venimos desde el carrusel
+  // Procesa preselección si venimos desde el carrusel.
   handlePreselectIfAny();
 
   /* ========== UI RENDER ========== */
+  // Crea el HTML de la tarjeta de habitación para mostrar resultados.
   const makeCard = (r, nights) => {
     const f = r.features || {};
     const total = r.priceNow * nights;
@@ -271,6 +290,7 @@
       </article>`;
   };
 
+  // Renderiza la lista de habitaciones disponibles dentro del grid de resultados.
   function renderResults(list, nights){
     grid.innerHTML = "";
     resMsg.textContent = "";
@@ -288,10 +308,11 @@
     });
     grid.appendChild(frag);
 
-    bindReserveButtonsDirect();
+    bindReserveButtonsDirect(); // activa el comportamiento de los botones de reservar
   }
 
   /* ========== BÚSQUEDA ========== */
+  // Busca habitaciones libres según fechas, huéspedes y ciudad seleccionada.
   function searchAvailability(e){
     e?.preventDefault();
 
@@ -321,6 +342,7 @@
   });
 
   /* ========== TOAST ========== */
+  // Muestra un mensaje pequeño en pantalla tipo toast.
   function showToast(msg){
     let t = document.getElementById("appToast");
     if(!t){
@@ -336,6 +358,7 @@
   }
 
   /* ========== RESERVAR (Drawer) ========== */
+  // Estado temporal de la reserva que está por confirmar.
   let selected = null;
 
   document.addEventListener("click", (e) => {
@@ -367,6 +390,7 @@
     });
   }
 
+  // Abre el panel lateral con los datos de la habitación seleccionada.
   function openDrawerFor(btn){
     const id = btn.getAttribute("data-book");
     const nights = parseInt(btn.getAttribute("data-nights"), 10) || 1;
@@ -421,6 +445,7 @@
     requestAnimationFrame(()=> drawer.classList.add("is-open"));
   }
 
+  // Cierra el drawer de reserva y limpia el estado seleccionado.
   function closeDrawer(){
     drawer?.classList.remove("is-open");
     setTimeout(()=> overlay.hidden = true, 160);
@@ -431,6 +456,7 @@
   btnCancel?.addEventListener("click", closeDrawer);
   overlay?.addEventListener("click", (e)=> { if (e.target === overlay) closeDrawer(); });
 
+  // Confirma la reserva tras validar login y disponibilidad.
   btnConfirm?.addEventListener("click", () => {
     if (!selected) return;
 
@@ -455,7 +481,7 @@
       return;
     }
 
-    // Snapshot incluye ciudad
+    // Snapshot incluye ciudad y características para mantener datos aunque cambie la habitación original.
     const r = selected.room;
     const snap = (({id, city, name, type, sizeM2, view, stars, image, features}) =>
       ({id, city, name, type, sizeM2, view, stars, image, features}))(r);
@@ -493,7 +519,7 @@
 
   if(checkin.value && checkout.value) searchAvailability();
 
-  // Export utilidades
+  // Exporta utilidades para que otros módulos accedan a reservas y funciones relacionadas.
   window.Resv = {
     getBookings, saveBookings, toISO, parseLocal, diffDays, overlap,
     isRoomFree, busy, showToast, rooms: window.__ERC_ROOMS
@@ -502,9 +528,10 @@
 
 /* ===================== MIS RESERVAS (solo del usuario) ===================== */
 (() => {
+  // Sección que muestra y edita solo las reservas del usuario autenticado.
   const LS_BOOKINGS = 'erc_reservas';
-  const getBookings = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || '[]');
-  const saveBookings = arr => localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr));
+  const getBookings = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || '[]'); // lee todas las reservas
+  const saveBookings = arr => localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr)); // guarda reservas actualizadas
   const toISO = (d) => { const dt = new Date(d); dt.setHours(12,0,0,0); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; };
   const parseLocal = (s) => (s ? new Date(`${s}T12:00:00`) : null);
   const diffDays = (a,b) => Math.round((b-a)/86400000);
@@ -513,10 +540,10 @@
   const starsHTML = n => '★'.repeat(n||0) + '☆'.repeat(Math.max(0,5-(n||0)));
 
   // IMPORTANTE: Usar SOLO la lista unificada expuesta por el primer IIFE
+  // Obtiene la lista de habitaciones global para usar en el historial del usuario.
   const allRooms = () => {
     const base = Array.isArray(window.__ERC_ROOMS) ? window.__ERC_ROOMS : [];
-    // (defensa extra) garantizar dedup
-    const map = new Map();
+    const map = new Map(); // dedup para evitar duplicados inesperados
     for (const r of base) {
       if (!r || typeof r !== 'object') continue;
       const id  = String(r.id || '').trim();
@@ -526,7 +553,7 @@
     return [...map.values()];
   };
 
-  const sec   = document.getElementById('myBookingsSec');
+  const sec   = document.getElementById('myBookingsSec'); // sección de reservas del usuario
   const list  = document.getElementById('myBookingsList');
 
   const editOverlay = document.getElementById('editOverlay');
@@ -540,6 +567,7 @@
 
   let editing = null;
 
+  // Renderiza las reservas del usuario que abrió sesión.
   function renderMyBookings(){
     if (!sec || !list) return;
     const ses = window.ErcAuth?.getSession?.();
@@ -605,7 +633,7 @@
     }).join('');
   }
 
-  // Cancelar
+  // Cancelar reserva: elimina la reserva del usuario.
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-cancel]');
     if (!btn) return;
@@ -619,7 +647,7 @@
     window.dispatchEvent(new Event('booking:changed'));
   });
 
-  // Abrir edición
+  // Abrir editor de fechas para una reserva existente.
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-edit]');
     if (!btn) return;
@@ -638,6 +666,7 @@
     updateEditPreview();
   });
 
+  // Cierra el drawer de edición de reserva.
   function closeEdit(){
     editDrawer?.classList.remove('is-open');
     setTimeout(() => editOverlay.hidden = true, 160);
@@ -647,6 +676,7 @@
   eClose?.addEventListener('click', closeEdit);
   editOverlay?.addEventListener('click', (e) => { if (e.target === editOverlay) closeEdit(); });
 
+  // Actualiza la vista previa de noches y total durante la edición.
   function updateEditPreview(){
     if (!nEl || !tEl || !editing) return;
     const s = parseLocal(eIn.value);
@@ -676,8 +706,8 @@
     );
   }
 
+  // Guarda cambios en la reserva editada después de validar fechas y disponibilidad.
   eSave?.addEventListener('click', () => {
-    if (!editing) return;
 
     const s = parseLocal(eIn.value);
     const t = parseLocal(eOut.value);
@@ -723,4 +753,3 @@
   window.addEventListener('booking:changed', renderMyBookings);
   document.addEventListener('DOMContentLoaded', renderMyBookings);
 })();
-

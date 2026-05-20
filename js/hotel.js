@@ -1,9 +1,11 @@
 (() => {
+  // Track del carrusel: puede ser roomsTrack o hotelsTrack
   const track =
     document.getElementById("roomsTrack") ||
     document.getElementById("hotelsTrack");
   if (!track) return;
 
+  // Datos por defecto de habitaciones (se usan si no hay datos en localStorage)
   const DEFAULT_ROOMS = [
     {
       id: "r1",
@@ -63,12 +65,13 @@
     }
   ];
 
+  // Sincroniza DEFAULT_ROOMS con localStorage sin sobrescribir ediciones del admin
   (function syncToStorage() {
     try {
       const stored = JSON.parse(localStorage.getItem("erc_rooms") || "[]");
       const storedIds = new Set(stored.map((r) => r.id));
 
-      // Añadir sólo las que el admin no tenga todavía
+      // Solo agrega las habitaciones que no existan aún
       const toAdd = DEFAULT_ROOMS.filter((r) => !storedIds.has(r.id));
       if (toAdd.length > 0 || stored.length === 0) {
         const merged = stored.length === 0 ? DEFAULT_ROOMS : [...stored, ...toAdd];
@@ -83,14 +86,14 @@
   let rooms;
   try {
     const stored = JSON.parse(localStorage.getItem("erc_rooms") || "[]");
-    // Sólo mostrar en carrusel las que tienen los ids originales (r1-r4)
-    // o todas si el admin agregó más — ajusta este filtro según necesites
-    rooms = stored.length > 0 ? stored : DEFAULT_ROOMS;
+    rooms = stored.length > 0 ? stored : DEFAULT_ROOMS; // Usa storage si existe
   } catch {
     rooms = DEFAULT_ROOMS;
   }
 
   /* ===== Helpers ===== */
+
+  // Formatea números como moneda COP
   const formatCOP = (n) =>
     new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -98,19 +101,25 @@
       maximumFractionDigits: 0,
     }).format(n);
 
+  // Genera estrellas ★★★☆☆
   const starsHTML = (n) => "★".repeat(n) + "☆".repeat(5 - n);
 
   const nextBtn = track.querySelector(".track-arrow.next");
   const prevBtn = track.querySelector(".track-arrow.prev");
 
   /* ===== Render ===== */
+
+  // Genera el HTML de cada tarjeta de habitación
   const makeCard = (r) => {
     const f = r.features || {};
     const bedsTxt = `${f.beds || 1} ${f.beds === 1 ? "cama" : "camas"}`;
     const paxTxt = `${r.capacity} ${r.capacity === 1 ? "huésped" : "huéspedes"}`;
+
+    // Calcula descuento si no viene explícito
     const discount = r.discount || (r.priceOld > r.priceNow
       ? Math.round((1 - r.priceNow / r.priceOld) * 100)
       : 0);
+
     const refDate = r.refDate || "";
     const rating  = r.rating  || "";
 
@@ -118,7 +127,7 @@
       <article class="hotel-card room-card" data-id="${r.id}">
         <div class="hotel-media">
           <img src="${r.image}" alt="${r.name}" loading="lazy">
-          ${rating ? `<span class="hotel-chip chip-score" title="Calificación">${Number(rating).toFixed(1)}</span>` : ""}
+          ${rating ? `<span class="hotel-chip chip-score" title="Calificación">${Number(r.rating).toFixed(1)}</span>` : ""}
           <span class="hotel-chip chip-stars" title="Categoría">${starsHTML(r.stars)}</span>
           <span class="hotel-chip chip-view" title="Vista">${r.view}</span>
         </div>
@@ -154,22 +163,28 @@
       </article>`;
   };
 
+  // Inserta todas las tarjetas en el carrusel
   const frag = document.createDocumentFragment();
   const insertBeforeNode = nextBtn || null;
+
   rooms.forEach((r) => {
     const wrap = document.createElement("div");
     wrap.innerHTML = makeCard(r);
     frag.appendChild(wrap.firstElementChild);
   });
+
   track.insertBefore(frag, insertBeforeNode);
 
   /* ===== Arrows / Navegación ===== */
+
+  // Calcula cuánto desplazar el carrusel por clic
   const getStep = () => {
     const card = track.querySelector(".hotel-card");
     if (!card) return 320;
     return Math.round(card.getBoundingClientRect().width + 16);
   };
 
+  // Habilita/deshabilita flechas según scroll
   const updateArrows = () => {
     const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
     const x = Math.round(track.scrollLeft);
@@ -184,6 +199,7 @@
   updateArrows();
 
   /* ===== Arrastre con inercia ===== */
+
   let dragging = false, startX = 0, startLeft = 0;
   let lastX = 0, lastT = 0, velocity = 0;
   let cancelClick = false, rafMomentum = 0;
@@ -191,6 +207,7 @@
   const now  = () => performance.now();
   const getX = (ev) => ("touches" in ev ? ev.touches[0].clientX : ev.clientX);
 
+  // Inicio del arrastre
   const onDown = (ev) => {
     dragging = true; cancelClick = false; velocity = 0;
     startX = getX(ev); startLeft = track.scrollLeft;
@@ -199,19 +216,23 @@
     if (rafMomentum) { cancelAnimationFrame(rafMomentum); rafMomentum = 0; }
   };
 
+  // Movimiento del arrastre
   const onMove = (ev) => {
     if (!dragging) return;
     const x = getX(ev);
     track.scrollLeft = startLeft - (x - startX);
+
     const t = now(), dt = Math.max(1, t - lastT);
-    velocity = (x - lastX) / dt;
+    velocity = (x - lastX) / dt; // Velocidad para inercia
     lastX = x; lastT = t;
+
     if (Math.abs(x - startX) > 4) cancelClick = true;
   };
 
+  // Inercia al soltar
   const momentum = () => {
     const step = () => {
-      velocity *= 0.95;
+      velocity *= 0.95; // Frenado gradual
       if (Math.abs(velocity) < 0.02) { rafMomentum = 0; updateArrows(); return; }
       track.scrollLeft -= velocity * 16;
       rafMomentum = requestAnimationFrame(step);
@@ -219,6 +240,7 @@
     rafMomentum = requestAnimationFrame(step);
   };
 
+  // Fin del arrastre
   const onUp = () => {
     if (!dragging) return;
     dragging = false;
@@ -228,6 +250,7 @@
     setTimeout(() => { cancelClick = false; }, 0);
   };
 
+  // Eventos de arrastre
   track.addEventListener("mousedown", onDown);
   window.addEventListener("mousemove", onMove);
   window.addEventListener("mouseup", onUp);
@@ -235,6 +258,7 @@
   track.addEventListener("touchmove",  onMove, { passive: true });
   track.addEventListener("touchend",   onUp);
 
+  // Evita clics accidentales durante arrastre
   track.addEventListener("click", (e) => {
     if (cancelClick) { e.stopPropagation(); e.preventDefault(); }
   }, true);
@@ -250,10 +274,12 @@
   track.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-book]");
     if (!btn) return;
+
     const id   = btn.getAttribute("data-book");
     const room = rooms.find((r) => r.id === id);
     if (!room) return;
 
+    // Guarda la habitación seleccionada para precargar en reservas.html
     localStorage.setItem("rb_preselect", JSON.stringify({
       id: room.id, name: room.name, type: room.type,
       capacity: room.capacity, rating: room.rating, stars: room.stars,
