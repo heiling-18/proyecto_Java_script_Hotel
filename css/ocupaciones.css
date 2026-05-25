@@ -1,0 +1,42 @@
+    .reporte-page { padding: 2.5rem 1rem 4rem; background: var(--color-section-bg); min-height: calc(100vh - 64px); }
+    .reporte-page h1 { font-size: 1.6rem; color: var(--color-text); margin: 0 0 .4rem; }
+    .reporte-page p.sub { color: var(--color-muted); font-size: .9rem; margin: 0 0 2rem; }
+ 
+    .filtro { display: flex; gap: .6rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filtro select {
+      border: 1.5px solid var(--color-border); border-radius: 8px;
+      padding: .55rem .9rem; font-size: .95rem; background: #fff;
+      color: var(--color-text); outline: none;
+    }
+    .filtro select:focus { border-color: var(--color-brand); }
+    .filtro button {
+      background: var(--color-brand); color: #fff; border: none;
+      border-radius: 8px; padding: .55rem 1.2rem; font-size: .9rem;
+      font-weight: 600; cursor: pointer;
+    }
+    .filtro button:hover { filter: brightness(1.1); }
+ 
+    .resumen { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .res-card {
+      background: #fff; border: 1.5px solid #e5ddd7; border-radius: 10px;
+      padding: 1rem 1.5rem; text-align: center; min-width: 130px;
+    }
+    .res-card .num { font-size: 1.8rem; font-weight: 800; color: var(--color-brand); }
+    .res-card.can .num { color: #b91c1c; }
+    .res-card .lbl { font-size: .75rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: .06em; }
+ 
+    #tabla { background: #fff; border-radius: 10px; border: 1.5px solid #e5ddd7; overflow: hidden; }
+    #tabla h2 {
+      margin: 0; padding: 1rem 1.5rem;
+      background: var(--color-brand); color: #fff; font-size: 1rem;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: .7rem 1.2rem; text-align: left; font-size: .75rem;
+      text-transform: uppercase; letter-spacing: .07em; color: var(--color-muted);
+      background: #f7f5f3; border-bottom: 1px solid #e5ddd7;
+    }
+    tbody td { padding: .75rem 1.2rem; border-bottom: 1px solid #f0ece8; font-size: .9rem; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #faf9f8; }
+    tbody tr.mes-actual { background: #fef9f6; font-weight: 600; color: var(--color-brand); }
