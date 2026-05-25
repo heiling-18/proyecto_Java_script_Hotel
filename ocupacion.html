@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ocupacion</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/ocupacion.js" defer></script>
+    <script src="/js/auth.js?v=3" defer></script>
+  <script src="/js/luxe-pass.js" defer></script>
+</head>
+<body>
+     <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">El Rincón del Carmen</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="reservas.html">Reservas</a>
+        <a href="contacto.html" data-active="true">Contacto</a>
+        <a href="ocupacion.html">Reportes</a>
+      </nav>
+      <div class="auth">
+        <a class="btn btn-login" href="#" id="btnLogin">Iniciar Sesión</a>
+      </div>
+    </div>
+  </header>
+   <div class="reportes">
+    <h1>Reportes</h1>
+  <section class="book-ribbon" id="bookRibbon" aria-label="Reserva tu habitación">
+    <div class="container">
+      <header class="ribbon-head">
+        <div class="ribbon-badge">
+      </header>
+
+      <form id="bookingForm" class="ribbon-form" novalidate>
+        <label class="rf-field">
+          <span>seleccione fecha</span>
+          <input type="date" id="checkin" required>
+        </label>
+
+        <button class="rf-cta" type="submit">
+          <span class="txt">Buscar</span>
+          <span class="shine" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <p class="book-msg" id="bookingMsg" aria-live="polite"></p>
+    </div>
+  </section>
+      <div class="res-grid" id="resultsGrid" aria-live="polite"></div>
+      <p id="resMsg" class="book-msg" style="text-align:center"></p>
+    </div>
+  </main>
+   </div>
+</body>
+</html>
